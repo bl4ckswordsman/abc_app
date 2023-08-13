@@ -1,6 +1,6 @@
 # abc_app
 
-A new Flutter project.
+An app to interact with the alphabet written in Flutter.
 
 ## Getting Started
 
