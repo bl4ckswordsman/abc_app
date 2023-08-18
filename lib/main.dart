@@ -19,7 +19,7 @@ class LanguageDropdown extends StatefulWidget {
 }
 
 class _LanguageDropdownState extends State<LanguageDropdown> {
-  Language _language = Language.swedish;
+  // Language _language = Language.swedish;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
       label: const Text('Language'),
       onSelected: (Language? newValue) {
         setState(() {
-          _language = newValue!;
+          //_language = newValue!;
         });
       },
       dropdownMenuEntries: <DropdownMenuEntry<Language>>[
@@ -84,7 +84,7 @@ class MyHomePage extends StatelessWidget {
         title: const Text('ABC app'),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: LanguageDropdown(),
           ), // Add the LanguageDropdown widget to the app bar
         ],
@@ -137,49 +137,26 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
 
 class AlphabetButton extends StatefulWidget {
   final String letter;
-  bool canOpenDetailsPage = true;
 
   AlphabetButton({required this.letter});
 
   @override
-  _AlphabetButtonState createState() => _AlphabetButtonState();
+  State<AlphabetButton> createState() => _AlphabetButtonState();
 }
 
 class _AlphabetButtonState extends State<AlphabetButton> {
-  bool _isExpanded = false;
-
-  bool get canOpenDetailsPage => widget.canOpenDetailsPage;
-
-  set canOpenDetailsPage(bool canOpenDetailsPage) {
-    widget.canOpenDetailsPage = canOpenDetailsPage;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ElevatedButton(
           onPressed: () {
-            if (!canOpenDetailsPage) {
-              //(!_isExpanded) {
-              setState(() {
-                //_isExpanded = true;
-                //canOpenDetailsPage = false;
-              });
-            }
-
-            // Check if the button can open the details page
-            if (widget.canOpenDetailsPage) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => _LetterDetailsPage(widget.letter),
                 ),
               );
-              setState(() {
-                canOpenDetailsPage = false;
-              });
-            }
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -190,7 +167,6 @@ class _AlphabetButtonState extends State<AlphabetButton> {
           child: Text(widget.letter,
               textAlign: TextAlign.center, style: TextStyle(fontSize: 60.0)),
         ),
-        if (_isExpanded) ...[]
       ],
     );
   }
@@ -202,7 +178,7 @@ class LargeLetterButton extends StatefulWidget {
   LargeLetterButton({required this.letter});
 
   @override
-  _LargeLetterButtonState createState() => _LargeLetterButtonState();
+  State<LargeLetterButton> createState() => _LargeLetterButtonState();
 }
 
 class _LargeLetterButtonState extends State<LargeLetterButton> {
