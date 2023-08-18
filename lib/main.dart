@@ -1,3 +1,6 @@
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -43,17 +46,16 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
   }
 }
 
-  String getLanguageLabel(Language language) {
-    switch (language) {
-      case Language.swedish:
-        return 'Svenska';
-      case Language.english:
-        return 'English';
-      default:
-        return '';
-    }
+String getLanguageLabel(Language language) {
+  switch (language) {
+    case Language.swedish:
+      return 'Svenska';
+    case Language.english:
+      return 'English';
+    default:
+      return '';
   }
-
+}
 
 class ABCapp extends StatelessWidget {
   const ABCapp({super.key});
@@ -72,7 +74,8 @@ class ABCapp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<String> englishAlphabet = List.generate(26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
+  final List<String> englishAlphabet = List.generate(
+      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
 
   @override
   Widget build(BuildContext context) {
@@ -110,26 +113,132 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-class AlphabetButton extends StatelessWidget {
+class _LetterDetailsPage extends StatefulWidget {
   final String letter;
+
+  _LetterDetailsPage(this.letter);
+
+  @override
+  State<_LetterDetailsPage> createState() => _LetterDetailsPageState();
+}
+
+class _LetterDetailsPageState extends State<_LetterDetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.letter),
+      ),
+      body: Center(
+        child: LargeLetterButton(letter: widget.letter),
+      ),
+    );
+  }
+}
+
+
+
+class AlphabetButton extends StatefulWidget {
+  final String letter;
+  bool canOpenDetailsPage = true;
 
   AlphabetButton({required this.letter});
 
   @override
+  _AlphabetButtonState createState() => _AlphabetButtonState();
+}
+
+class _AlphabetButtonState extends State<AlphabetButton> {
+  bool _isExpanded = false;
+  
+  bool get canOpenDetailsPage => widget.canOpenDetailsPage;
+  
+  set canOpenDetailsPage(bool canOpenDetailsPage) {
+    widget.canOpenDetailsPage = canOpenDetailsPage;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120.0, // Set a fixed width for all buttons
-      height: 120.0, // Set a fixed height for all buttons
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle button press
-        },
-        child: Text(letter),
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white, backgroundColor: Colors.blue, shape: CircleBorder(),
-          textStyle: TextStyle(fontSize: 60.0),
+    return Stack(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            if (!canOpenDetailsPage) { //(!_isExpanded) {
+              setState(() {
+                //_isExpanded = true;
+                //canOpenDetailsPage = false;
+              });
+            }
+
+            // Check if the button can open the details page
+            if (widget.canOpenDetailsPage) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => _LetterDetailsPage(widget.letter),
+                ),
+              );
+              setState(() {
+                canOpenDetailsPage = false;
+              });
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blue,
+            minimumSize: const Size(120, 120),
+            shape: CircleBorder(),
+          ),
+          child: Text(widget.letter,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 60.0)),
         ),
+        if (_isExpanded) ...[]
+          
+    ],
+    );
+  }
+}
+
+class LargeLetterButton extends StatefulWidget {
+  final String letter;
+
+  LargeLetterButton({required this.letter});
+
+  @override
+  _LargeLetterButtonState createState() => _LargeLetterButtonState();
+}
+
+class _LargeLetterButtonState extends State<LargeLetterButton> {
+  @override
+  Widget build(BuildContext context) {
+    // Get the size of the current screen
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+
+    // Calculate the size of the button
+    double buttonWidth = screenWidth * 0.7;
+    double buttonHeight = screenHeight * 0.7;
+
+    // Calculate the size of the text
+    double textSize = min(buttonWidth, buttonHeight) * 0.6;
+    return ElevatedButton(
+      onPressed: () {
+        // Change button color to random color on press
+        //Navigator.push(
+        ////
+        //);
+      },
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blue,
+        minimumSize: Size(buttonWidth, buttonHeight),
+        shape: CircleBorder(),
       ),
+      child: Text(widget.letter,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: textSize)),
     );
   }
 }
