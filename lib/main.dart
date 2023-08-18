@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -136,8 +135,6 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
   }
 }
 
-
-
 class AlphabetButton extends StatefulWidget {
   final String letter;
   bool canOpenDetailsPage = true;
@@ -150,9 +147,9 @@ class AlphabetButton extends StatefulWidget {
 
 class _AlphabetButtonState extends State<AlphabetButton> {
   bool _isExpanded = false;
-  
+
   bool get canOpenDetailsPage => widget.canOpenDetailsPage;
-  
+
   set canOpenDetailsPage(bool canOpenDetailsPage) {
     widget.canOpenDetailsPage = canOpenDetailsPage;
   }
@@ -163,7 +160,8 @@ class _AlphabetButtonState extends State<AlphabetButton> {
       children: [
         ElevatedButton(
           onPressed: () {
-            if (!canOpenDetailsPage) { //(!_isExpanded) {
+            if (!canOpenDetailsPage) {
+              //(!_isExpanded) {
               setState(() {
                 //_isExpanded = true;
                 //canOpenDetailsPage = false;
@@ -175,7 +173,7 @@ class _AlphabetButtonState extends State<AlphabetButton> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => _LetterDetailsPage(widget.letter),
+                  builder: (context) => _LetterDetailsPage(widget.letter),
                 ),
               );
               setState(() {
@@ -190,12 +188,10 @@ class _AlphabetButtonState extends State<AlphabetButton> {
             shape: CircleBorder(),
           ),
           child: Text(widget.letter,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 60.0)),
+              textAlign: TextAlign.center, style: TextStyle(fontSize: 60.0)),
         ),
         if (_isExpanded) ...[]
-          
-    ],
+      ],
     );
   }
 }
@@ -210,6 +206,7 @@ class LargeLetterButton extends StatefulWidget {
 }
 
 class _LargeLetterButtonState extends State<LargeLetterButton> {
+  Color _buttonColor = Colors.blue;
   @override
   Widget build(BuildContext context) {
     // Get the size of the current screen
@@ -226,19 +223,21 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
     return ElevatedButton(
       onPressed: () {
         // Change button color to random color on press
-        //Navigator.push(
-        ////
-        //);
+        Color randomColor =
+            Colors.primaries[Random().nextInt(Colors.primaries.length)];
+        setState(() {
+          _buttonColor = randomColor;
+        });
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.blue,
+        backgroundColor: _buttonColor,
         minimumSize: Size(buttonWidth, buttonHeight),
         shape: CircleBorder(),
-      ),
+        splashFactory: InkSparkle.splashFactory,
+        ),
       child: Text(widget.letter,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: textSize)),
+          textAlign: TextAlign.center, style: TextStyle(fontSize: textSize)),
     );
   }
 }
