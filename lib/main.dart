@@ -90,10 +90,9 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            clipBehavior: Clip.none,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Wrap(
               spacing: 16.0,
               runSpacing: 16.0,
