@@ -88,58 +88,67 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="animated">
-                <script>
-                    const projectName = getUsernameFromURL();
-                    document.write(projectName + " Landing Page");
-                </script>
-            </h1>
-            <p class="animated">This is the landing page of the
-                <script>document.write(getRepoFromURL())</script> project</p>
-        </div>
-        <div class="main">
-            <h2 class="animated">About Me</h2>
-            <p class="animated">PLACEHOLDER.</p>
-        </div>
-        <div class="footer">
-            <p>Copyright &copy;
-                <script>
-                    document.write(new Date().getFullYear());
-                    document.write(" " + getUsernameFromURL());
-                </script>
-            </p>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1 class="animated">
+            <a id="GHProfileLink" target="_blank"> </a> Landing Page
+        </h1>
+        <p class="animated">This is the landing page of the
+            <a id="projectLink" target="_blank"></a> project.
+        </p>
     </div>
-    <div id="readme-content"></div>
+    <div class="main">
+        <h2 class="animated">About Me</h2>
+        <p class="animated">PLACEHOLDER.</p>
+    </div>
+    <div class="footer">
+        <p>Copyright &copy;
+            <script>
+                document.write(new Date().getFullYear());
+                document.write(" " + getUsernameFromURL());
+            </script>
+        </p>
+    </div>
+</div>
+<div id="readme-content"></div>
 
-    <script>
-        const readmeContainer = document.getElementById("readme-content");
+<script>
+    const readmeContainer = document.getElementById("readme-content");
 
-        // Replace with your GitHub repository details
-        const owner = getUsernameFromURL();
-        const repo = getRepoFromURL();
-        const readmePath = "README.md";
+    // Replace with your GitHub repository details
+    const owner = getUsernameFromURL();
+    const repo = getRepoFromURL();
+    const readmePath = "README.md";
 
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
-        //const apiUrl = `https://api.github.com/repos/bl4ckswordsman/abc_app/contents/${readmePath}`;
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
+    //const apiUrl = `https://api.github.com/repos/bl4ckswordsman/abc_app/contents/${readmePath}`;
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.content) {
-                    const decodedContent = atob(data.content); // Decode Base64 content
-                    readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
-                } else {
-                    readmeContainer.innerHTML = "README not found.";
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching README:", error);
-                readmeContainer.innerHTML = "Error fetching README.";
-            });
-    </script>
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.content) {
+                const decodedContent = atob(data.content); // Decode Base64 content
+                readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
+            } else {
+                readmeContainer.innerHTML = "README not found.";
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching README:", error);
+            readmeContainer.innerHTML = "Error fetching README.";
+        });
+
+    // Set the href of the GitHub link
+    const profileLink = document.getElementById("githubLink");
+    const userName = getUsernameFromURL();
+    profileLink.href = `https://github.com/${userName}`;
+    profileLink.textContent = userName; // Set link text
+
+    const projectLink = document.getElementById("projectLink");
+    const project = getRepoFromURL();
+    projectLink.href = `https://github.com/${userName}/${project}`;
+    projectLink.textContent = project;
+</script>
 
 
 </body>
