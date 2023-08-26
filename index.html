@@ -10,7 +10,7 @@
         function getUsernameFromURL() {
             const url = window.location.href;
             const parts = url.split('.');
-            return parts[0].replace("https://", ""); 
+            return parts[0].replace("https://", "");
         }
 
         function getRepoFromURL() {
@@ -112,8 +112,8 @@
         const readmeContainer = document.getElementById("readme-content");
 
         // Replace with your GitHub repository details
-        const owner = "your-github-username";
-        const repo = "your-repository-name";
+        const owner = getUsernameFromURL();
+        const repo = getRepoFromURL();
         const readmePath = "README.md";
 
         const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
