@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Landing Page</title>
-  <script>
-    function getTitle() {
-      var url = window.location.href;
-      var username = url.substring(url.lastIndexOf("/") + 1);
-      return username + "'s landing page";
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Landing Page</title>
+        <style>
+          /* Your existing styles here */
+        </style>
+        <script>
+          // Function to extract username from the URL
+          function getUsernameFromURL() {
+            const url = window.location.href;
+            const parts = url.split('/');
+            return parts[3]; // Assuming the username is always in this position
+          }
+      
+          // Function to set the title and header text
+          function setTitleAndHeaderText() {
+            const username = getUsernameFromURL();
+            const title = `${username}'s landing page`;
+            const header = document.querySelector('.header h1');
+            const headerText = document.querySelector('.header p');
+      
+            document.title = title;
+            header.textContent = title;
+            headerText.textContent = `This is ${username}'s landing page,...`;
+          }
+      
+          // Call the function when the page loads
+          window.onload = setTitleAndHeaderText;
+
+
+    function addTitle() {
+      // Get the username.
+      var username = getUsername();
+
+      // Create the title tag.
+      var titleTag = document.createElement("title");
+      titleTag.innerHTML = username + "'s Landing Page";
+
+      // Append the title tag to the document.
+      document.head.appendChild(titleTag);
     }
 
-    document.title = getTitle();
+    // Add the title tag when the page loads.
+    window.onload = addTitle;
   </script>
   <style>
     body {
