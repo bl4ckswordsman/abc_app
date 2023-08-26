@@ -93,8 +93,8 @@
         <h1 class="animated">
             <a id="GHProfileLink" target="_blank"> </a> Landing Page
         </h1>
-        <p class="animated">This is the landing page of the
-            <a id="projectLink" target="_blank"></a> project.
+        <p class="animated">
+            This is the landing page of the <a id="projectLink" target="_blank"></a> project.
         </p>
     </div>
     <div class="main">
@@ -139,7 +139,7 @@
         });
 
     // Set the href of the GitHub link
-    const profileLink = document.getElementById("githubLink");
+    const profileLink = document.getElementById("GHProfileLink");
     const userName = getUsernameFromURL();
     profileLink.href = `https://github.com/${userName}`;
     profileLink.textContent = userName; // Set link text
