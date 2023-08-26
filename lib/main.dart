@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'emoji.dart';
+
 void main() {
-  runApp(const ABCapp());
+  runApp(
+    const ABCapp());
 }
 
 enum Language {
@@ -126,12 +129,26 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.letter),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.emoji_emotions),
+            color: Colors.blue,
+            onPressed: () {
+              // Show a big alert dialog with an emoji. The dialog is dismissed
+              // after 3 seconds.
+              Emoji.emojiDialog(context, widget.letter);
+              
+            },
+      ),
+      ],
       ),
       body: Center(
         child: LargeLetterButton(letter: widget.letter),
       ),
     );
   }
+
 }
 
 class AlphabetButton extends StatefulWidget {
@@ -216,3 +233,5 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
     );
   }
 }
+
+
