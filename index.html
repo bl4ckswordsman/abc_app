@@ -10,13 +10,13 @@
         function getUsernameFromURL() {
             const url = window.location.href;
             const parts = url.split('.');
-            return parts[0]; // Assuming the username is always in this position
+            return parts[0].replace("https://", ""); 
         }
 
         function getRepoFromURL() {
             const url = window.location.href;
             const parts = url.split('/');
-            return parts[2];
+            return parts[3];
         }
 
     </script>
