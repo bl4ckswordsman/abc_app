@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Github Pages - Landing Page</title>
     <!-- Include a Markdown to HTML library like "marked" -->
-    <script src="https://cdn.jsdelivr.net/npm/marked@3.0.5/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked"></script>
     <script>
         // Function to extract username from the URL
         function getUsernameFromURL() {
@@ -91,7 +91,7 @@
     <div class="container">
         <div class="header">
             <h1 class="animated">
-                < My Landing Page >
+                <script> getUsernameFromURL() </script> Landing Page
             </h1>
             <p class="animated">This is my landing page,....</p>
         </div>
@@ -111,31 +111,30 @@
     <div id="readme-content"></div>
 
     <script>
-        window.onload = function() {
-            const readmeContainer = document.getElementById("readme-content");
+        const readmeContainer = document.getElementById("readme-content");
 
-            // Replace with your GitHub repository details
-            const owner = getUsernameFromURL();
-            const repo = getRepoFromURL();
-            const readmePath = "README.md";
+        // Replace with your GitHub repository details
+        const owner = getUsernameFromURL();
+        const repo = getRepoFromURL();
+        const readmePath = "README.md";
 
-            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
+        //const apiUrl = `https://api.github.com/repos/bl4ckswordsman/abc_app/contents/${readmePath}`;
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.content) {
-                        const decodedContent = atob(data.content); // Decode Base64 content
-                        readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
-                    } else {
-                        readmeContainer.innerHTML = "README not found.";
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching README:", error);
-                    readmeContainer.innerHTML = "Error fetching README.";
-                });
-        };
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.content) {
+                    const decodedContent = atob(data.content); // Decode Base64 content
+                    readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
+                } else {
+                    readmeContainer.innerHTML = "README not found.";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching README:", error);
+                readmeContainer.innerHTML = "Error fetching README.";
+            });
     </script>
 
 
