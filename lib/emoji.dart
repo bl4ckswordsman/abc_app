@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+
+
 class Emoji {
   static Future<dynamic> emojiDialog(BuildContext context, String letter) {
     late Timer _timer;
@@ -28,10 +30,10 @@ class Emoji {
             ],
           );
         }).then((value) {
-      if (_timer.isActive) {
-        _timer.cancel();
-      }
-    });
+          if (_timer.isActive) {
+            _timer.cancel();
+          }
+        });
   }
 
   static List<String> emojis = [
