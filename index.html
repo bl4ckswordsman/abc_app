@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Landing Page</title>
+  <script>
+    function getTitle() {
+      var url = window.location.href;
+      var username = url.substring(url.lastIndexOf("/") + 1);
+      return username + "'s landing page";
+    }
+
+    document.title = getTitle();
+  </script>
   <style>
     body {
       background-color: #222;
