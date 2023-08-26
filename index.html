@@ -91,9 +91,13 @@
     <div class="container">
         <div class="header">
             <h1 class="animated">
-                <script> getUsernameFromURL() </script> Landing Page
+                <script>
+                    const projectName = getUsernameFromURL();
+                    document.write(projectName + " Landing Page");
+                </script>
             </h1>
-            <p class="animated">This is my landing page,....</p>
+            <p class="animated">This is the landing page of the
+                <script>document.write(getRepoFromURL())</script> project</p>
         </div>
         <div class="main">
             <h2 class="animated">About Me</h2>
