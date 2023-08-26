@@ -78,6 +78,8 @@ class ABCapp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   final List<String> englishAlphabet = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
+  final List<String> swedishAlphabet = List.generate(
+      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))..addAll(['Å', 'Ä', 'Ö']);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,7 @@ class MyHomePage extends StatelessWidget {
               spacing: 16.0,
               runSpacing: 16.0,
               children: [
-                for (var letter in englishAlphabet)
+                for (var letter in swedishAlphabet)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: AlphabetButton(letter: letter),
