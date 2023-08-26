@@ -5,39 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Github Pages - Landing Page</title>
-    <!-- Include a Markdown to HTML library like "marked" -->
-    <script src="https://cdn.jsdelivr.net/npm/marked"></script>
-    <script>
-        // Function to extract username from the URL
-        function getUsernameFromURL() {
-            const url = window.location.href;
-            const parts = url.split('.');
-            return parts[0].replace("https://", "");
-        }
-
-        function getRepoFromURL() {
-            const url = window.location.href;
-            const parts = url.split('/');
-            return parts[3];
-        }
-
-    </script>
+    <!-- Add Bootstrap CSS link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #222;
-            color: #fff;
-            font-family: sans-serif;
         }
 
         .container {
-            width: 100%;
             max-width: 500px;
             margin: 0 auto;
+            color: #fff;
         }
 
         .header {
             background-color: #444;
             padding: 20px;
+            border-radius: 10px 10px 0 0;
         }
 
         .header h1 {
@@ -51,6 +35,8 @@
 
         .main {
             padding: 20px;
+            background-color: #333;
+            border-radius: 0 0 10px 10px;
         }
 
         .main h2 {
@@ -62,17 +48,24 @@
         }
 
         .footer {
-            background-color: #333;
+            background-color: #444;
             padding: 20px;
             text-align: center;
+            border-radius: 0 0 10px 10px;
         }
 
         .footer p {
             margin-top: 0;
         }
 
+        /* Animation is achieved through Bootstrap classes */
         .animated {
             animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Change link color to orange */
+        .text-orange {
+            color: #FFA500;
         }
 
         @keyframes fadeIn {
@@ -89,21 +82,38 @@
 
 <body>
 <div class="container">
-    <div class="header">
+    <div class="header bg-primary text-white">
         <h1 class="animated">
-            <a id="GHProfileLink" target="_blank"> </a> Landing Page
+            <a id="GHProfileLink" target="_blank" class="text-orange"></a> Landing Page
         </h1>
         <p class="animated">
-            This is the landing page of the <a id="projectLink" target="_blank"></a> project.
+            This is the landing page of the <a id="projectLink" target="_blank" class="text-orange"></a> project.
         </p>
     </div>
     <div class="main">
         <h2 class="animated">About Me</h2>
         <p class="animated">PLACEHOLDER.</p>
+        <button id="goToProjectBtn" class="btn btn-primary">Go to project page</button>
+        <div id="healthCheck" class="mt-3">
+            <span id="healthIcon"></span>
+            <span id="healthText">Checking project page...</span>
+        </div>
     </div>
-    <div class="footer">
+    <div class="footer bg-dark text-white">
         <p>Copyright &copy;
             <script>
+                function getUsernameFromURL() {
+                    const url = window.location.href;
+                    const parts = url.split('.');
+                    return parts[0].replace("https://", "");
+                }
+
+                function getRepoFromURL() {
+                    const url = window.location.href;
+                    const parts = url.split('/');
+                    return parts[3];
+                }
+
                 document.write(new Date().getFullYear());
                 document.write(" " + getUsernameFromURL());
             </script>
@@ -112,32 +122,10 @@
 </div>
 <div id="readme-content"></div>
 
+<!-- Add Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    const readmeContainer = document.getElementById("readme-content");
-
-    // Replace with your GitHub repository details
-    const owner = getUsernameFromURL();
-    const repo = getRepoFromURL();
-    const readmePath = "README.md";
-
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
-    //const apiUrl = `https://api.github.com/repos/bl4ckswordsman/abc_app/contents/${readmePath}`;
-
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.content) {
-                const decodedContent = atob(data.content); // Decode Base64 content
-                readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
-            } else {
-                readmeContainer.innerHTML = "README not found.";
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching README:", error);
-            readmeContainer.innerHTML = "Error fetching README.";
-        });
-
     // Set the href of the GitHub link
     const profileLink = document.getElementById("GHProfileLink");
     const userName = getUsernameFromURL();
@@ -148,8 +136,33 @@
     const project = getRepoFromURL();
     projectLink.href = `https://github.com/${userName}/${project}`;
     projectLink.textContent = project;
-</script>
 
+    const goToProjectBtn = document.getElementById("goToProjectBtn");
+    const healthIcon = document.getElementById("healthIcon");
+    const healthText = document.getElementById("healthText");
+
+    //const ghDotIoDir = "PROJECDIR"; // Replace with your actual value
+    const ghDotIoDir = "build/web"
+
+    goToProjectBtn.addEventListener("click", () => {
+        healthText.textContent = "Checking project page...";
+        fetch(`https://${userName}.github.io/${project}/${ghDotIoDir}`)
+            .then(response => {
+                if (response.ok) {
+                    healthIcon.innerHTML = "&#10004;"; // Checkmark symbol
+                    healthText.textContent = "Project page is available!";
+                    window.open(`https://${userName}.github.io/${project}/${ghDotIoDir}`);
+                } else {
+                    healthIcon.innerHTML = "&#10008;"; // X symbol
+                    healthText.textContent = "No Github Page for this project.";
+                }
+            })
+            .catch(() => {
+                healthIcon.innerHTML = "&#10008;"; // X symbol
+                healthText.textContent = "No Github Page for this project.";
+            });
+    });
+</script>
 
 </body>
 
