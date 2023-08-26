@@ -10,39 +10,15 @@
         function getUsernameFromURL() {
             const url = window.location.href;
             const parts = url.split('.');
-            return parts[1]; // Assuming the username is always in this position
+            return parts[0]; // Assuming the username is always in this position
         }
 
-        // Function to set the title and header text
-        function setTitleAndHeaderText() {
-            const username = getUsernameFromURL();
-            const title = `${username}'s landing page`;
-            const header = document.querySelector('.header h1');
-            const headerText = document.querySelector('.header p');
-
-            document.title = title;
-            header.textContent = title;
-            headerText.textContent = `This is ${username}'s landing page,...`;
+        function getRepoFromURL() {
+            const url = window.location.href;
+            const parts = url.split('/');
+            return parts[2];
         }
 
-        // Call the function when the page loads
-        window.onload = setTitleAndHeaderText;
-
-
-        function addTitle() {
-            // Get the username.
-            var username = getUsernameFromURL();
-
-            // Create the title tag.
-            var titleTag = document.createElement("title");
-            titleTag.innerHTML = username + "'s Landing Page";
-
-            // Append the title tag to the document.
-            document.head.appendChild(titleTag);
-        }
-
-        // Add the title tag when the page loads.
-        window.onload = addTitle;
     </script>
     <style>
         body {
@@ -113,7 +89,7 @@
     <div class="container">
         <div class="header">
             <h1 class="animated">
-                <My Landing Page>
+                < My Landing Page >
             </h1>
             <p class="animated">This is my landing page,....</p>
         </div>
@@ -123,10 +99,43 @@
         </div>
         <div class="footer">
             <p>Copyright &copy;
-                <script>document.write(new Date().getFullYear());</script> Amarildo Rajta
+                <script>
+                    document.write(new Date().getFullYear());
+                    document.write(" " + getUsernameFromURL());
+                </script>
             </p>
         </div>
     </div>
+    <div id="readme-content"></div>
+
+    <script>
+        const readmeContainer = document.getElementById("readme-content");
+
+        // Replace with your GitHub repository details
+        const owner = "your-github-username";
+        const repo = "your-repository-name";
+        const readmePath = "README.md";
+
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.content) {
+                    const decodedContent = atob(data.content); // Decode Base64 content
+                    readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
+                } else {
+                    readmeContainer.innerHTML = "README not found.";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching README:", error);
+                readmeContainer.innerHTML = "Error fetching README.";
+            });
+    </script>
+
+    <!-- Include a Markdown to HTML library like "marked" -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@3.0.5/marked.min.js"></script>
 </body>
 
 </html>
