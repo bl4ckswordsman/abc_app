@@ -111,29 +111,31 @@
     <div id="readme-content"></div>
 
     <script>
-        const readmeContainer = document.getElementById("readme-content");
+        window.onload = function() {
+            const readmeContainer = document.getElementById("readme-content");
 
-        // Replace with your GitHub repository details
-        const owner = getUsernameFromURL();
-        const repo = getRepoFromURL();
-        const readmePath = "README.md";
+            // Replace with your GitHub repository details
+            const owner = getUsernameFromURL();
+            const repo = getRepoFromURL();
+            const readmePath = "README.md";
 
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${readmePath}`;
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.content) {
-                    const decodedContent = atob(data.content); // Decode Base64 content
-                    readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
-                } else {
-                    readmeContainer.innerHTML = "README not found.";
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching README:", error);
-                readmeContainer.innerHTML = "Error fetching README.";
-            });
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.content) {
+                        const decodedContent = atob(data.content); // Decode Base64 content
+                        readmeContainer.innerHTML = marked(decodedContent); // You need to include a Markdown to HTML library like "marked"
+                    } else {
+                        readmeContainer.innerHTML = "README not found.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching README:", error);
+                    readmeContainer.innerHTML = "Error fetching README.";
+                });
+        };
     </script>
 
 
