@@ -10,7 +10,7 @@ class Emoji {
     return showDialog(
         context: context,
         builder: (BuildContext builderContext) {
-          _timer = Timer(Duration(milliseconds: 1500), () {
+          _timer = Timer(Duration(seconds: 3), () {
             Navigator.of(builderContext).pop();
           });
           return SimpleDialog(
