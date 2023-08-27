@@ -46,7 +46,7 @@ class ABCapp extends StatelessWidget {
   }
 }
 
-enum Language {
+/*enum Language {
   swedish,
   english,
 }
@@ -105,7 +105,7 @@ String getLanguageLabel(Language language) {
     default:
       return '';
   }
-}
+}*/
 
 class MyHomePage extends StatelessWidget {
   /*final List<String> englishAlphabet = List.generate(
