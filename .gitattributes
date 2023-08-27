@@ -1,1 +1,4 @@
-/build/* linguist-vendored
+build/* linguist-vendored
+build/web/* linguist-vendored
+build2/* linguist-vendored
+build2/web/* linguist-vendored
