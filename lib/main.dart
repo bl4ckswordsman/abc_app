@@ -124,22 +124,23 @@ class MyHomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: IconButton(
-            iconSize: 30.0,
-            icon: const Icon(Icons.brightness_4),
-            onPressed: () {
-              if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
-                AdaptiveTheme.of(context).setLight();
-              } else {
-                AdaptiveTheme.of(context).setDark();
-              }
-            },
-          ),
-          
-          /*Padding(
+              iconSize: 30.0,
+              icon: const Icon(Icons.brightness_4),
+              onPressed: () {
+                if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
+                  AdaptiveTheme.of(context).setLight();
+                } else {
+                  AdaptiveTheme.of(context).setDark();
+                }
+              },
+            ),
+
+            /*Padding(
             padding: const EdgeInsets.all(16.0),
             child: LanguageDropdown(),
           ),*/ // Add the LanguageDropdown widget to the app bar
-      )],
+          )
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
