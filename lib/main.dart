@@ -133,14 +133,12 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
         title: Text(widget.letter),
         actions: [
           IconButton(
+            iconSize: 40.0,
             icon: const Icon(
               Icons.emoji_emotions),
-            color: Colors.blue,
+            color: Colors.red,
             onPressed: () {
-              // Show a big alert dialog with an emoji. The dialog is dismissed
-              // after 3 seconds.
               Emoji.emojiDialog(context, widget.letter);
-              
             },
       ),
       ],
