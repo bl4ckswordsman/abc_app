@@ -2,11 +2,48 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
+
 import 'emoji.dart';
 
 void main() {
-  runApp(
-    const ABCapp());
+  /*ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: Colors.blue, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
+  );
+
+  ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Colors.black, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+  );*/
+  runApp(const ABCapp());
+}
+
+class ABCapp extends StatelessWidget {
+  const ABCapp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveTheme(
+      light: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+      ),
+      dark: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+        primaryColor: Colors.deepOrange,
+      ),
+      initial: AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => MaterialApp(
+        title: 'ABC app',
+        theme: theme,
+        darkTheme: darkTheme,
+        home: MyHomePage(),
+      ),
+    );
+  }
 }
 
 enum Language {
@@ -22,13 +59,13 @@ class LanguageDropdown extends StatefulWidget {
 }
 
 class _LanguageDropdownState extends State<LanguageDropdown> {
-  // Language _language = Language.swedish;
+  Language _language = Language.swedish;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<Language>(
-      initialSelection: Language.swedish,
-      label: const Text('Language'),
+      //initialSelection: Language.swedish,
+      label: Text(getLanguageLabel(_language)),
       onSelected: (Language? newValue) {
         setState(() {
           //_language = newValue!;
@@ -37,18 +74,18 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
       dropdownMenuEntries: <DropdownMenuEntry<Language>>[
         DropdownMenuEntry<Language>(
           value: Language.swedish,
-          label: 'Svenska',
+          label: getSelectedLanguageLabel(Language.swedish),
         ),
-        DropdownMenuEntry<Language>(
+        /*DropdownMenuEntry<Language>(
           value: Language.english,
           label: 'English',
-        ),
+        ),*/
       ],
     );
   }
 }
 
-String getLanguageLabel(Language language) {
+String getSelectedLanguageLabel(Language language) {
   switch (language) {
     case Language.swedish:
       return 'Svenska';
@@ -59,27 +96,23 @@ String getLanguageLabel(Language language) {
   }
 }
 
-class ABCapp extends StatelessWidget {
-  const ABCapp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ABC app',
-      home: MyHomePage(),
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-      ),
-    );
+String getLanguageLabel(Language language) {
+  switch (language) {
+    case Language.swedish:
+      return 'Språk';
+    case Language.english:
+      return 'Language';
+    default:
+      return '';
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<String> englishAlphabet = List.generate(
-      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
+  /*final List<String> englishAlphabet = List.generate(
+      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));*/
   final List<String> swedishAlphabet = List.generate(
-      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))..addAll(['Å', 'Ä', 'Ö']);
+      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
+    ..addAll(['Å', 'Ä', 'Ö']);
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +122,24 @@ class MyHomePage extends StatelessWidget {
         title: const Text('ABC app'),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.all(16.0),
+            child: IconButton(
+            iconSize: 30.0,
+            icon: const Icon(Icons.brightness_4),
+            onPressed: () {
+              if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
+                AdaptiveTheme.of(context).setLight();
+              } else {
+                AdaptiveTheme.of(context).setDark();
+              }
+            },
+          ),
+          
+          /*Padding(
+            padding: const EdgeInsets.all(16.0),
             child: LanguageDropdown(),
-          ), // Add the LanguageDropdown widget to the app bar
-        ],
+          ),*/ // Add the LanguageDropdown widget to the app bar
+      )],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -134,21 +181,19 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
         actions: [
           IconButton(
             iconSize: 40.0,
-            icon: const Icon(
-              Icons.emoji_emotions),
+            icon: const Icon(Icons.emoji_emotions),
             color: Colors.red,
             onPressed: () {
               Emoji.emojiDialog(context, widget.letter);
             },
-      ),
-      ],
+          ),
+        ],
       ),
       body: Center(
         child: LargeLetterButton(letter: widget.letter),
       ),
     );
   }
-
 }
 
 class AlphabetButton extends StatefulWidget {
@@ -167,12 +212,12 @@ class _AlphabetButtonState extends State<AlphabetButton> {
       children: [
         ElevatedButton(
           onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => _LetterDetailsPage(widget.letter),
-                ),
-              );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _LetterDetailsPage(widget.letter),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -227,11 +272,9 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
         minimumSize: Size(buttonWidth, buttonHeight),
         shape: CircleBorder(),
         splashFactory: InkSparkle.splashFactory,
-        ),
+      ),
       child: Text(widget.letter,
           textAlign: TextAlign.center, style: TextStyle(fontSize: textSize)),
     );
   }
 }
-
-

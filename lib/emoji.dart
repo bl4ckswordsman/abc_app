@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class Emoji {
   static Future<dynamic> emojiDialog(BuildContext context, String letter) {
+    // ignore: no_leading_underscores_for_local_identifiers
     late Timer _timer;
     return showDialog(
         context: context,
