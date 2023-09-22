@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'emoji.dart';
+import 'settings.dart';
 
 void main() {
   /*ThemeData lightTheme = ThemeData(
@@ -20,7 +21,7 @@ void main() {
 }
 
 class ABCapp extends StatelessWidget {
-  const ABCapp({super.key});
+  const ABCapp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,13 @@ class ABCapp extends StatelessWidget {
       ),
       initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(
-        title: 'ABC app',
-        theme: theme,
-        darkTheme: darkTheme,
-        home: MyHomePage(),
-      ),
+          title: 'ABC app',
+          theme: theme,
+          darkTheme: darkTheme,
+          home: MyHomePage(),
+          routes: {
+            '/settings': (context) => SettingsPage(),
+          }),
     );
   }
 }
@@ -107,12 +110,41 @@ String getLanguageLabel(Language language) {
   }
 }*/
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   /*final List<String> englishAlphabet = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));*/
   final List<String> swedishAlphabet = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
     ..addAll(['Å', 'Ä', 'Ö']);
+
+  List<PopupMenuItem> get menuItems => [
+        PopupMenuItem(
+          child: IconButton(
+            icon: const Icon(Icons.brightness_4),
+            onPressed: () {
+              if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
+                AdaptiveTheme.of(context).setLight();
+              } else {
+                AdaptiveTheme.of(context).setDark();
+              }
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +153,7 @@ class MyHomePage extends StatelessWidget {
         toolbarHeight: 100,
         title: const Text('ABC app'),
         actions: [
-          Padding(
+          /*Padding(
             padding: const EdgeInsets.all(16.0),
             child: IconButton(
               iconSize: 30.0,
@@ -134,12 +166,24 @@ class MyHomePage extends StatelessWidget {
                 }
               },
             ),
+          ),*/
 
-            /*Padding(
+          /*// Add the LanguageDropdown widget to the app bar
+          Padding(
             padding: const EdgeInsets.all(16.0),
             child: LanguageDropdown(),
-          ),*/ // Add the LanguageDropdown widget to the app bar
-          )
+          ),*/
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: PopupMenuButton(
+              iconSize: 30.0,
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (context) {
+                return menuItems;
+              },
+            ),
+          ),
         ],
       ),
       body: Center(
