@@ -8,8 +8,6 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:r_upgrade/r_upgrade.dart';
 
-
-
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
     try {
@@ -39,8 +37,6 @@ class SettingsPageState extends State<SettingsPage> {
       'https://api.github.com/repos/bl4ckswordsman/abc_app/';
   static const String uri = '${repoUri}releases/latest';
 
-//TODO: REMOVE THIS
-
   set _packageInfo(PackageInfo packageInfo) {}
   //final MyWebView webView = MyWebView();
   // Get the current theme mode
@@ -57,34 +53,15 @@ class SettingsPageState extends State<SettingsPage> {
     }
   }
 
-    void upgradeFromUrl()async{
-        bool? isSuccess =await RUpgrade.upgradeFromUrl(
-                    'https://github.com/bl4ckswordsman/abc_app/releases/download/v0.5.5/abc_app_v0.5.5.apk',
-                  );
-        print(isSuccess);
-    }
-
-        void upgrade() async {
-    }
-
-  /*Future<void> downloadLatestApk() async {
-  // Get the latest release information from GitHub
-  final latestRelease = await getLatestReleaseInfo();
-
-  // Get the URL of the latest APK file
-  final apkUrl = latestRelease['assets'][0]['browser_download_url'];
-
-  // Download the APK file
-  final response = await http.get(Uri.parse(apkUrl));
-  final apkData = await response.bodyBytes;
-
-  // Write the APK file to a temporary directory
-  final tempDir = await Directory.systemTemp.createTemp();
-  final apkFile = await File('${tempDir.path}/abc_app.apk').writeAsBytes(apkData);
-
-  // Install the APK file
-  await AndroidPackageInstaller.installApk(apkFilePath: apkFile.path);
-}*/
+  void upgrade() async {
+    final latestRelease = await getLatestReleaseInfo();
+    String apkLink = latestRelease['assets'][0]['browser_download_url'];
+    await RUpgrade.upgrade(
+      apkLink,
+      fileName: 'app-release.apk',
+      installType: RUpgradeInstallType.normal,
+    );
+  }
 
 // Define a function to show the latest release information
   void showAndroidUpdates() async {
@@ -128,10 +105,8 @@ class SettingsPageState extends State<SettingsPage> {
               TextButton(
                 child: Text('Update'),
                 onPressed: () async {
-                    upgrade();
-                },// TODO: Handle update button press
-                  
-              
+                  upgrade();
+                }, // TODO: Handle update button press
               ),
             TextButton(
               child: Text('Close'),
@@ -223,30 +198,30 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-void showReleaseInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String currentVersion = packageInfo.version;
+  void showReleaseInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentVersion = packageInfo.version;
 
-  // Get the latest release information from GitHub
-  final latestRelease = await getLatestReleaseInfo();
-  String latestVersion = latestRelease['tag_name'];
+    // Get the latest release information from GitHub
+    final latestRelease = await getLatestReleaseInfo();
+    String latestVersion = latestRelease['tag_name'];
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Build info'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Current version: v$currentVersion'),
-            Text('Latest version: $latestVersion'),
-            Text(latestRelease['assets'][0]['browser_download_url']),
-          ],
-        ),
-      );
-    },
-  );
-}
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Build info'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Current version: v$currentVersion'),
+              Text('Latest version: $latestVersion'),
+              Text(latestRelease['assets'][0]['browser_download_url']),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
