@@ -53,6 +53,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         minSdkVersion 21
+        archivesBaseName = "$applicationId-v$flutterVersionName"
     }
 
     buildTypes {
@@ -62,6 +63,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 flutter {
