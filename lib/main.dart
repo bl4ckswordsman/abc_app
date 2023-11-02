@@ -21,7 +21,7 @@ void main() {
 }
 
 class ABCapp extends StatelessWidget {
-  const ABCapp({Key? key}) : super(key: key);
+  const ABCapp({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:r_upgrade/r_upgrade.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -84,7 +86,15 @@ class SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Latest Release'),
+          title: isUpdateAvailable
+              ? Row(
+                  children: [
+                    Icon(Icons.new_releases_outlined),
+                    SizedBox(width: 8.0),
+                    Text('New Update Available')
+                  ],
+                )
+              : Text('Latest Release'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,11 +103,6 @@ class SettingsPageState extends State<SettingsPage> {
               Text('Is update available: $isUpdateAvailable'),
               Text('Latest version: $latestVersion'),
               Text('Description: ${latestRelease['body']}'),
-              TextButton(
-                  child: Text('GitHub repo'),
-                  onPressed: () {
-                    ChromeWebView()._launchURL(repoLink, context);
-                  }),
             ],
           ),
           actions: [
@@ -127,10 +132,8 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _initPackageInfo() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _packageInfo = packageInfo;
   }
 
   @override
@@ -171,19 +174,29 @@ class SettingsPageState extends State<SettingsPage> {
               showReleaseInfo();
             },
           ),
-          Platform.isAndroid
-              ? ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0),
-                    child: Text(
-                      'Sök efter uppdateringar',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  onTap: () {
-                    showAndroidUpdates();
-                  },
-                )
+          !kIsWeb
+              ? Platform.isAndroid
+                  ? ListTile(
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        child: Text(
+                          'Sök efter uppdateringar',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      onTap: () {
+                        showAndroidUpdates();
+                      },
+                    )
+                  : ListTile(
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        child: Text(
+                          'Sök efter uppdateringar',
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                        ),
+                      ),
+                    )
               : ListTile(
                   title: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18.0),
@@ -200,7 +213,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   void showReleaseInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String currentVersion = packageInfo.version;
+    String currentVersion = packageInfo.version; //}
 
     // Get the latest release information from GitHub
     final latestRelease = await getLatestReleaseInfo();
@@ -217,7 +230,14 @@ class SettingsPageState extends State<SettingsPage> {
             children: [
               Text('Current version: v$currentVersion'),
               Text('Latest version: $latestVersion'),
-              Text(latestRelease['assets'][0]['browser_download_url']),
+              SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: () {
+                  ChromeWebView()._launchURL(repoLink, context);
+                },
+                icon: Icon(EvaIcons.github),
+                label: Text('GitHub repo'),
+              ),
             ],
           ),
         );
