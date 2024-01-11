@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:abc_app/audio_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'emoji.dart';
 import 'settings.dart';
@@ -289,6 +291,8 @@ class LargeLetterButton extends StatefulWidget {
 
 class _LargeLetterButtonState extends State<LargeLetterButton> {
   Color _buttonColor = Colors.blue;
+  // Create an instance of AudioManager
+  final AudioManager audioManager = AudioManager();
   @override
   Widget build(BuildContext context) {
     // Get the size of the current screen
@@ -303,13 +307,14 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
     // Calculate the size of the text
     double textSize = min(buttonWidth, buttonHeight) * 0.6;
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         // Change button color to random color on press
         Color randomColor =
             Colors.primaries[Random().nextInt(Colors.primaries.length)];
         setState(() {
           _buttonColor = randomColor;
         });
+        await audioManager.playRandom();
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
