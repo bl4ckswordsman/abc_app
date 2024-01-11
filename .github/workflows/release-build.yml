@@ -5,6 +5,9 @@ on:
     tags:
       - "v*"
 
+env:
+  APP_NAME: abc_app
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Build with Flutter
         env:
-          MY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
@@ -41,11 +44,11 @@ jobs:
           keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
           keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
       - name: Add version to APK
-        run: mv ${{steps.sign_apk.outputs.signedFile}} revanced-manager-${{ env.RELEASE_VERSION }}.apk
+        run: mv ${{ steps.sign_apk.outputs.signedFile }} ${{ env.APP_NAME }}-release-${{ env.RELEASE_VERSION }}.apk
       - name: Publish release APK
         uses: "mathieucarbou/marvinpinto-action-automatic-releases@latest"
         # uses: "marvinpinto/action-automatic-releases@latest" original repo with deprecated set-output
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.MY_GITHUB_TOKEN }}"
           prerelease: false
-          files: revanced-manager-${{ env.RELEASE_VERSION }}.apk
+          files: ${{ env.APP_NAME }}-release-${{ env.RELEASE_VERSION }}.apk
