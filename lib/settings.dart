@@ -9,6 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:r_upgrade/r_upgrade.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -95,15 +96,38 @@ class SettingsPageState extends State<SettingsPage> {
                   ],
                 )
               : Text('Latest Release'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Current version: $currentVersion'),
-              Text('Is update available: $isUpdateAvailable'),
-              Text('Latest version: $latestVersion'),
-              Text('Description: ${latestRelease['body']}'),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Current version: $currentVersion',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'Latest version: $latestVersion',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text.rich(
+                  TextSpan(
+                    children: latestRelease['body']
+                        .split('\n')
+                        .map<InlineSpan>((line) {
+                      if (line.startsWith('##')) {
+                        return TextSpan(
+                          text: line.substring(2) + '\n', // Remove '##'
+                          style:
+                              TextStyle(fontSize: 16), // Apply larger font size
+                        );
+                      } else {
+                        return TextSpan(text: line + '\n');
+                      }
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             if (isUpdateAvailable)
