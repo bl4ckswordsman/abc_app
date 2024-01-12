@@ -29,7 +29,6 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Build with Flutter
         env:
-          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
@@ -49,6 +48,6 @@ jobs:
         uses: "mathieucarbou/marvinpinto-action-automatic-releases@latest"
         # uses: "marvinpinto/action-automatic-releases@latest" original repo with deprecated set-output
         with:
-          repo_token: "${{ secrets.MY_GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: ${{ env.APP_NAME }}-release-${{ env.RELEASE_VERSION }}.apk
