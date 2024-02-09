@@ -14,12 +14,13 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
     try {
-      await launch(
-        urlString,
-        customTabsOption: CustomTabsOption(
-          extraCustomTabs: const <String>[
+      await launchUrl(
+        Uri.parse(urlString),
+        customTabsOptions: CustomTabsOptions(
+          browser: CustomTabsBrowserConfiguration(
+          fallbackCustomTabs:[
             'com.android.chrome',
-          ],
+          ]),
         ),
       );
     } catch (e) {
