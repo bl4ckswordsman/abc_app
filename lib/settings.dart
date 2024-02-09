@@ -10,6 +10,7 @@ import 'package:r_upgrade/r_upgrade.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'dart:math' as math;
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -67,20 +68,37 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-// Define a function to show the latest release information
+  bool isVersionGreater(String currentVersion, String latestVersion) {
+  List<int> currentParts = currentVersion.split('.').map(int.parse).toList();
+  List<int> latestParts = latestVersion.split('.').map(int.parse).toList();
+
+  for (int i = 0; i < math.max(currentParts.length, latestParts.length); i++) {
+    int currentPart = i < currentParts.length ? currentParts[i] : 0;
+    int latestPart = i < latestParts.length ? latestParts[i] : 0;
+    if (currentPart < latestPart) {
+      return true;
+    } else if (currentPart > latestPart) {
+      return false;
+    }
+  }
+  return false;
+}
+
+
+/// Show a dialog with the latest release information and an update button if an update is available
   void showAndroidUpdates() async {
     // Get the latest release information from GitHub
     final latestRelease = await getLatestReleaseInfo();
 
     // Get the current app version
-    //const currentVersion = '0.5.4'; // TODO: Get the current app version
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
 
     // Check if the latest release is newer than the current version
     final latestVersion = latestRelease['tag_name'];
     final latestVersionNum = latestVersion.substring(1);
-    final isUpdateAvailable = latestVersionNum.compareTo(currentVersion) > 0;
+    final currentVersionNum = currentVersion;
+    final isUpdateAvailable = isVersionGreater(currentVersionNum, latestVersionNum);
 
     // Show a dialog with the latest release information and an update button if an update is available
     // ignore: use_build_context_synchronously
