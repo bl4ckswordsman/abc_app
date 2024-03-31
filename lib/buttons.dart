@@ -2,6 +2,7 @@ import 'package:abc_app/emoji.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:abc_app/audio_manager.dart';
+import 'package:abc_app/confetti_animation.dart';
 
 class AlphabetButton extends StatefulWidget {
   final String letter;
@@ -71,6 +72,8 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
         // Change button color to random color on press
         Color randomColor =
             Colors.primaries[Random().nextInt(Colors.primaries.length)];
+        // Play the confetti animation
+        context.playConfetti();
         setState(() {
           _buttonColor = randomColor;
         });
@@ -116,7 +119,10 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
         ],
       ),
       body: Center(
-        child: LargeLetterButton(letter: widget.letter),
+        child: ConfettiAnimation(
+          alignment: Alignment.center,
+          child: LargeLetterButton(letter: widget.letter),
+        ),
       ),
     );
   }
