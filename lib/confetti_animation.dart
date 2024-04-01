@@ -49,8 +49,8 @@ class _ConfettiAnimationState extends State<ConfettiAnimation> {
               blastDirection: pi / 2, // radial value - DOWN
               particleDrag: 0.05, // apply drag to the confetti
               emissionFrequency: 0.05, // how often it should emit
-              numberOfParticles: 20, // number of particles to emit
-              gravity: 0.05, // gravity - or how fast they should fall
+              numberOfParticles: 10, // number of particles to emit
+              gravity: 0.1, // gravity - or how fast they should fall
               shouldLoop:
                   false, // start again as soon as the animation is finished
               colors: const [
