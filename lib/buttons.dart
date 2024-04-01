@@ -1,8 +1,40 @@
+import 'package:abc_app/audio_manager.dart';
 import 'package:abc_app/emoji.dart';
+import 'package:abc_app/material3_shapes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:abc_app/audio_manager.dart';
 import 'package:abc_app/confetti_animation.dart';
+
+enum AnimationType { confetti, fireworks }
+
+class AnimationController {
+  final AnimationType type;
+
+  AnimationController(this.type);
+
+  Widget getAnimation({required Widget child}) {
+    switch (type) {
+      case AnimationType.confetti:
+        return ConfettiAnimation(child: child);
+      case AnimationType.fireworks:
+        // return FireworksAnimation(child: child);
+        return Container(); // Placeholder for demonstration
+    }
+  }
+}
+
+List<OutlinedBorder Function()> shapes = [
+  circle,
+  square,
+  threePointStar,
+  fourPointStar,
+  fourPointStarRotated,
+  fivePointStar,
+  pentagon,
+  sixPointStar,
+  hexagon,
+  eightPointStar,
+];
 
 class AlphabetButton extends StatefulWidget {
   final String letter;
@@ -54,6 +86,8 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
   Color _buttonColor = Colors.blue;
   // Create an instance of AudioManager
   final AudioManager audioManager = AudioManager();
+
+  OutlinedBorder Function() _currentShape = circle;
   @override
   Widget build(BuildContext context) {
     // Get the size of the current screen
@@ -78,12 +112,15 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
           _buttonColor = randomColor;
         });
         await audioManager.playRandom();
+        setState(() {
+          _currentShape = shapes[Random().nextInt(shapes.length)];
+        });
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: _buttonColor,
         minimumSize: Size(buttonWidth, buttonHeight),
-        shape: CircleBorder(),
+        shape: _currentShape(),
         splashFactory: InkSparkle.splashFactory,
       ),
       child: Text(widget.letter,
@@ -102,6 +139,9 @@ class _LetterDetailsPage extends StatefulWidget {
 }
 
 class _LetterDetailsPageState extends State<_LetterDetailsPage> {
+  final AnimationController animationController =
+      AnimationController(AnimationType.confetti);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,8 +159,7 @@ class _LetterDetailsPageState extends State<_LetterDetailsPage> {
         ],
       ),
       body: Center(
-        child: ConfettiAnimation(
-          alignment: Alignment.center,
+        child: animationController.getAnimation(
           child: LargeLetterButton(letter: widget.letter),
         ),
       ),
