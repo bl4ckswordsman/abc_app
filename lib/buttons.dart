@@ -92,15 +92,10 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
   Widget build(BuildContext context) {
     // Get the size of the current screen
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    double screenWidth = mediaQuery.size.width;
-    double screenHeight = mediaQuery.size.height;
+    double screenSize = min(mediaQuery.size.width, mediaQuery.size.height); // Use the smaller dimension
 
-    // Calculate the size of the button
-    double buttonWidth = screenWidth * 0.7;
-    double buttonHeight = screenHeight * 0.7;
-
-    // Calculate the size of the text
-    double textSize = min(buttonWidth, buttonHeight) * 0.6;
+    double buttonSize = screenSize * 0.7; // Ensure button is a square
+    double textSize = buttonSize * 0.6;
     return ElevatedButton(
       onPressed: () async {
         // Change button color to random color on press
@@ -119,7 +114,7 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: _buttonColor,
-        minimumSize: Size(buttonWidth, buttonHeight),
+        minimumSize: Size(buttonSize, buttonSize),
         shape: _currentShape(),
         splashFactory: InkSparkle.splashFactory,
       ),
