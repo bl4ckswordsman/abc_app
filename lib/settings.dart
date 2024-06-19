@@ -9,7 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:r_upgrade/r_upgrade.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+// import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:math' as math;
 
 class ChromeWebView {
