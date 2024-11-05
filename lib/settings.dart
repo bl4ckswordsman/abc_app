@@ -6,11 +6,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:r_upgrade/r_upgrade.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:math' as math;
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -58,14 +59,15 @@ class SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  void upgrade() async {
-    final latestRelease = await getLatestReleaseInfo();
-    String apkLink = latestRelease['assets'][0]['browser_download_url'];
-    await RUpgrade.upgrade(
-      apkLink,
-      fileName: 'app-release.apk',
-      installType: RUpgradeInstallType.normal,
-    );
+  Future<void> downloadAndInstallApk(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+
+    final dir = await getExternalStorageDirectory();
+    final file = File('${dir!.path}/app-release.apk');
+    await file.writeAsBytes(bytes);
+
+    OpenFile.open(file.path);
   }
 
   bool isVersionGreater(String currentVersion, String latestVersion) {
@@ -153,8 +155,9 @@ class SettingsPageState extends State<SettingsPage> {
               TextButton(
                 child: Text('Update'),
                 onPressed: () async {
-                  upgrade();
-                }, // TODO: Handle update button press
+                  final apkLink = latestRelease['assets'][0]['browser_download_url'];
+                  await downloadAndInstallApk(apkLink);
+                },
               ),
             TextButton(
               child: Text('Close'),
