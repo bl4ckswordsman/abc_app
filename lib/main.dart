@@ -13,8 +13,10 @@ class ABCapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => LanguageProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
+      ],
       child: AdaptiveTheme(
         light: ThemeData(
           brightness: Brightness.light,
