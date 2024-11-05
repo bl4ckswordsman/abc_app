@@ -13,3 +13,10 @@
 ## 0.5.0
 
     * Implemented emojis for given letter, added dark theme support & toggle. Properly implemented Swedish language but disabled language picker.
+
+## 0.7.41
+
+    * Added basic native language support with a language switcher in settings.
+    * Added English language support for the alphabet letters.
+    * Implemented a language switcher in `lib/settings.dart`.
+    * Enabled the language switcher in `lib/main.dart`.
