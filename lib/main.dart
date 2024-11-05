@@ -2,6 +2,7 @@ import 'package:abc_app/buttons.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:abc_app/language_provider.dart';
 import 'settings.dart';
 
 void main() {
@@ -121,16 +122,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
-}
-
-class LanguageProvider with ChangeNotifier {
-  Language _language = Language.swedish;
-
-  Language get language => _language;
-
-  void setLanguage(Language language) {
-    _language = language;
-    notifyListeners();
   }
 }
