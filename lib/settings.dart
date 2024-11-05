@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -10,8 +9,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:math' as math;
-import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
+import 'update_service.dart';
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -20,9 +18,10 @@ class ChromeWebView {
         Uri.parse(urlString),
         customTabsOptions: CustomTabsOptions(
           browser: CustomTabsBrowserConfiguration(
-          fallbackCustomTabs:[
-            'com.android.chrome',
-          ]),
+            fallbackCustomTabs: [
+              'com.android.chrome',
+            ],
+          ),
         ),
       );
     } catch (e) {
@@ -43,8 +42,6 @@ class SettingsPageState extends State<SettingsPage> {
       'https://api.github.com/repos/bl4ckswordsman/abc_app/';
   static const String uri = '${repoUri}releases/latest';
 
-  set _packageInfo(PackageInfo packageInfo) {}
-  //final MyWebView webView = MyWebView();
   // Get the current theme mode
   AdaptiveThemeMode getThemeMode() {
     return AdaptiveTheme.of(context).mode;
@@ -59,35 +56,25 @@ class SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  Future<void> downloadAndInstallApk(String url) async {
-    final response = await http.get(Uri.parse(url));
-    final bytes = response.bodyBytes;
-
-    final dir = await getExternalStorageDirectory();
-    final file = File('${dir!.path}/app-release.apk');
-    await file.writeAsBytes(bytes);
-
-    OpenFile.open(file.path);
-  }
-
   bool isVersionGreater(String currentVersion, String latestVersion) {
-  List<int> currentParts = currentVersion.split('.').map(int.parse).toList();
-  List<int> latestParts = latestVersion.split('.').map(int.parse).toList();
+    List<int> currentParts =
+        currentVersion.split('.').map(int.parse).toList();
+    List<int> latestParts =
+        latestVersion.split('.').map(int.parse).toList();
 
-  for (int i = 0; i < math.max(currentParts.length, latestParts.length); i++) {
-    int currentPart = i < currentParts.length ? currentParts[i] : 0;
-    int latestPart = i < latestParts.length ? latestParts[i] : 0;
-    if (currentPart < latestPart) {
-      return true;
-    } else if (currentPart > latestPart) {
-      return false;
+    for (int i = 0; i < math.max(currentParts.length, latestParts.length); i++) {
+      int currentPart = i < currentParts.length ? currentParts[i] : 0;
+      int latestPart = i < latestParts.length ? latestParts[i] : 0;
+      if (currentPart < latestPart) {
+        return true;
+      } else if (currentPart > latestPart) {
+        return false;
+      }
     }
+    return false;
   }
-  return false;
-}
 
-
-/// Show a dialog with the latest release information and an update button if an update is available
+  /// Show a dialog with the latest release information and an update button if an update is available
   void showAndroidUpdates() async {
     // Get the latest release information from GitHub
     final latestRelease = await getLatestReleaseInfo();
@@ -100,7 +87,8 @@ class SettingsPageState extends State<SettingsPage> {
     final latestVersion = latestRelease['tag_name'];
     final latestVersionNum = latestVersion.substring(1);
     final currentVersionNum = currentVersion;
-    final isUpdateAvailable = isVersionGreater(currentVersionNum, latestVersionNum);
+    final isUpdateAvailable =
+        isVersionGreater(currentVersionNum, latestVersionNum);
 
     // Show a dialog with the latest release information and an update button if an update is available
     // ignore: use_build_context_synchronously
@@ -155,8 +143,10 @@ class SettingsPageState extends State<SettingsPage> {
               TextButton(
                 child: Text('Update'),
                 onPressed: () async {
-                  final apkLink = latestRelease['assets'][0]['browser_download_url'];
-                  await downloadAndInstallApk(apkLink);
+                  final apkLink =
+                      latestRelease['assets'][0]['browser_download_url'];
+                  await UpdateService().downloadAndInstallApk(apkLink);
+                  Navigator.of(context).pop();
                 },
               ),
             TextButton(
@@ -178,8 +168,7 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _initPackageInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    _packageInfo = packageInfo;
+    setState(() {});
   }
 
   @override
@@ -239,7 +228,8 @@ class SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         child: Text(
                           'Sök efter uppdateringar',
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.grey),
                         ),
                       ),
                     )
@@ -248,7 +238,8 @@ class SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.symmetric(vertical: 18.0),
                     child: Text(
                       'Sök efter uppdateringar',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
+                      style:
+                          TextStyle(fontSize: 20, color: Colors.grey),
                     ),
                   ),
                 ),
@@ -259,7 +250,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   void showReleaseInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String currentVersion = packageInfo.version; //}
+    String currentVersion = packageInfo.version;
 
     // Get the latest release information from GitHub
     final latestRelease = await getLatestReleaseInfo();
