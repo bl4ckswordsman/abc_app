@@ -6,13 +6,13 @@ import 'language_provider.dart';
 
 class Emoji {
   static Future<dynamic> emojiDialog(BuildContext context, String letter) {
-    late Timer _timer;
+    late Timer timer;
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
 
     return showDialog(
         context: context,
         builder: (BuildContext builderContext) {
-          _timer = Timer(Duration(seconds: 3), () {
+          timer = Timer(Duration(seconds: 3), () {
             Navigator.of(builderContext).pop();
           });
           return SimpleDialog(
@@ -34,8 +34,8 @@ class Emoji {
             ],
           );
         }).then((value) {
-      if (_timer.isActive) {
-        _timer.cancel();
+      if (timer.isActive) {
+        timer.cancel();
       }
     });
   }
