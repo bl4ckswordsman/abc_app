@@ -243,6 +243,16 @@ class SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              child: Text(
+                'Language',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            trailing: LanguageDropdown(),
+          ),
         ],
       ),
     );
@@ -280,5 +290,50 @@ class SettingsPageState extends State<SettingsPage> {
         );
       },
     );
+  }
+}
+
+enum Language {
+  swedish,
+  english,
+}
+
+class LanguageDropdown extends StatefulWidget {
+  const LanguageDropdown({super.key});
+
+  @override
+  State<LanguageDropdown> createState() => _LanguageDropdownState();
+}
+
+class _LanguageDropdownState extends State<LanguageDropdown> {
+  Language _language = Language.swedish;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Language>(
+      value: _language,
+      onChanged: (Language? newValue) {
+        setState(() {
+          _language = newValue!;
+        });
+      },
+      items: Language.values.map<DropdownMenuItem<Language>>((Language value) {
+        return DropdownMenuItem<Language>(
+          value: value,
+          child: Text(getLanguageLabel(value)),
+        );
+      }).toList(),
+    );
+  }
+}
+
+String getLanguageLabel(Language language) {
+  switch (language) {
+    case Language.swedish:
+      return 'Svenska';
+    case Language.english:
+      return 'English';
+    default:
+      return '';
   }
 }

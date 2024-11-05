@@ -46,7 +46,7 @@ class ABCapp extends StatelessWidget {
   }
 }
 
-/*enum Language {
+enum Language {
   swedish,
   english,
 }
@@ -68,7 +68,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
       label: Text(getLanguageLabel(_language)),
       onSelected: (Language? newValue) {
         setState(() {
-          //_language = newValue!;
+          _language = newValue!;
         });
       },
       dropdownMenuEntries: <DropdownMenuEntry<Language>>[
@@ -76,10 +76,10 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
           value: Language.swedish,
           label: getSelectedLanguageLabel(Language.swedish),
         ),
-        /*DropdownMenuEntry<Language>(
+        DropdownMenuEntry<Language>(
           value: Language.english,
           label: 'English',
-        ),*/
+        ),
       ],
     );
   }
@@ -105,7 +105,7 @@ String getLanguageLabel(Language language) {
     default:
       return '';
   }
-}*/
+}
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -113,11 +113,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  /*final List<String> englishAlphabet = List.generate(
-      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));*/
+  final List<String> englishAlphabet = List.generate(
+      26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
   final List<String> swedishAlphabet = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
     ..addAll(['Å', 'Ä', 'Ö']);
+
+  Language _selectedLanguage = Language.swedish;
 
   List<PopupMenuItem> get menuItems => [
         PopupMenuItem(
@@ -165,11 +167,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),*/
 
-          /*// Add the LanguageDropdown widget to the app bar
+          // Add the LanguageDropdown widget to the app bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: LanguageDropdown(),
-          ),*/
+          ),
 
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -191,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
               spacing: 16.0,
               runSpacing: 16.0,
               children: [
-                for (var letter in swedishAlphabet)
+                for (var letter in _selectedLanguage == Language.swedish
+                    ? swedishAlphabet
+                    : englishAlphabet)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: AlphabetButton(letter: letter),
