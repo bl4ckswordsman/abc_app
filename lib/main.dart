@@ -1,7 +1,7 @@
 import 'package:abc_app/buttons.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'settings.dart';
 
 void main() {
@@ -13,26 +13,29 @@ class ABCapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      light: ThemeData(
-        brightness: Brightness.light,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+    return ChangeNotifierProvider(
+      create: (context) => LanguageProvider(),
+      child: AdaptiveTheme(
+        light: ThemeData(
+          brightness: Brightness.light,
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        ),
+        dark: ThemeData(
+          brightness: Brightness.dark,
+          useMaterial3: true,
+          primaryColor: Colors.deepOrange,
+        ),
+        initial: AdaptiveThemeMode.light,
+        builder: (theme, darkTheme) => MaterialApp(
+            title: 'ABC app',
+            theme: theme,
+            darkTheme: darkTheme,
+            home: MyHomePage(),
+            routes: {
+              '/settings': (context) => SettingsPage(),
+            }),
       ),
-      dark: ThemeData(
-        brightness: Brightness.dark,
-        useMaterial3: true,
-        primaryColor: Colors.deepOrange,
-      ),
-      initial: AdaptiveThemeMode.light,
-      builder: (theme, darkTheme) => MaterialApp(
-          title: 'ABC app',
-          theme: theme,
-          darkTheme: darkTheme,
-          home: MyHomePage(),
-          routes: {
-            '/settings': (context) => SettingsPage(),
-          }),
     );
   }
 }
@@ -48,8 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<String> swedishAlphabet = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
     ..addAll(['Å', 'Ä', 'Ö']);
-
-  Language _selectedLanguage = Language.swedish;
 
   List<PopupMenuItem> get menuItems => [
         PopupMenuItem(
@@ -77,6 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final selectedAlphabet = languageProvider.language == Language.swedish
+        ? swedishAlphabet
+        : englishAlphabet;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -102,9 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
               spacing: 16.0,
               runSpacing: 16.0,
               children: [
-                for (var letter in _selectedLanguage == Language.swedish
-                    ? swedishAlphabet
-                    : englishAlphabet)
+                for (var letter in selectedAlphabet)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: AlphabetButton(letter: letter),
@@ -115,5 +119,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+}
+
+class LanguageProvider with ChangeNotifier {
+  Language _language = Language.swedish;
+
+  Language get language => _language;
+
+  void setLanguage(Language language) {
+    _language = language;
+    notifyListeners();
   }
 }

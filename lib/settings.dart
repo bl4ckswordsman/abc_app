@@ -10,6 +10,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:math' as math;
 import 'update_service.dart';
+import 'package:provider/provider.dart';
 
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
@@ -175,7 +176,7 @@ class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inställningar'),
+        title: Text('Settings'),
       ),
       body: ListView(
         children: [
@@ -184,7 +185,7 @@ class SettingsPageState extends State<SettingsPage> {
             title: Padding(
               padding: const EdgeInsets.symmetric(vertical: 18.0),
               child: Text(
-                'Mörkt tema',
+                'Dark Theme',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -215,7 +216,7 @@ class SettingsPageState extends State<SettingsPage> {
                       title: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         child: Text(
-                          'Sök efter uppdateringar',
+                          'Check for updates',
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -227,7 +228,7 @@ class SettingsPageState extends State<SettingsPage> {
                       title: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         child: Text(
-                          'Sök efter uppdateringar',
+                          'Check for updates',
                           style:
                               TextStyle(fontSize: 20, color: Colors.grey),
                         ),
@@ -237,7 +238,7 @@ class SettingsPageState extends State<SettingsPage> {
                   title: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18.0),
                     child: Text(
-                      'Sök efter uppdateringar',
+                      'Check for updates',
                       style:
                           TextStyle(fontSize: 20, color: Colors.grey),
                     ),
@@ -306,16 +307,15 @@ class LanguageDropdown extends StatefulWidget {
 }
 
 class _LanguageDropdownState extends State<LanguageDropdown> {
-  Language _language = Language.swedish;
-
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
     return DropdownButton<Language>(
-      value: _language,
+      value: languageProvider.language,
       onChanged: (Language? newValue) {
-        setState(() {
-          _language = newValue!;
-        });
+        if (newValue != null) {
+          languageProvider.setLanguage(newValue);
+        }
       },
       items: Language.values.map<DropdownMenuItem<Language>>((Language value) {
         return DropdownMenuItem<Language>(
@@ -335,5 +335,16 @@ String getLanguageLabel(Language language) {
       return 'English';
     default:
       return '';
+  }
+}
+
+class LanguageProvider with ChangeNotifier {
+  Language _language = Language.swedish;
+
+  Language get language => _language;
+
+  void setLanguage(Language language) {
+    _language = language;
+    notifyListeners();
   }
 }
