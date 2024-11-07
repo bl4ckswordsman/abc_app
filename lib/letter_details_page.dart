@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:abc_app/emoji.dart';
 import 'package:abc_app/animation_controller.dart' as custom_animation;
 
-class LetterDetailsPage extends StatefulWidget { // Removed underscore
+class LetterDetailsPage extends StatefulWidget {
   final String letter;
 
-  LetterDetailsPage(this.letter); // Removed underscore
+  LetterDetailsPage(this.letter);
 
   @override
-  State<LetterDetailsPage> createState() => _LetterDetailsPageState(); // Removed underscore
+  State<LetterDetailsPage> createState() => LetterDetailsPageState();
 }
 
-class _LetterDetailsPageState extends State<LetterDetailsPage> { // Removed underscore
-  final custom_animation.AnimationController animationController =
+class LetterDetailsPageState extends State<LetterDetailsPage> {
+  final custom_animation.AnimationController confettiAnimationController =
       custom_animation.AnimationController(custom_animation.AnimationType.confetti);
 
   @override
@@ -27,13 +27,13 @@ class _LetterDetailsPageState extends State<LetterDetailsPage> { // Removed unde
             icon: const Icon(Icons.emoji_emotions),
             color: Colors.red,
             onPressed: () {
-              Emoji.emojiDialog(context, widget.letter);
+              Emoji.showEmojiDialog(context, widget.letter);
             },
           ),
         ],
       ),
       body: Center(
-        child: animationController.getAnimation(
+        child: confettiAnimationController.getAnimation(
           child: LargeLetterButton(letter: widget.letter),
         ),
       ),

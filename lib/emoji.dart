@@ -5,39 +5,53 @@ import 'package:provider/provider.dart';
 import 'language_provider.dart';
 
 class Emoji {
-  static Future<dynamic> emojiDialog(BuildContext context, String letter) {
-    late Timer timer;
+  static Future<dynamic> showEmojiDialog(BuildContext context, String letter) {
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
 
     return showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          timer = Timer(Duration(seconds: 3), () {
-            Navigator.of(builderContext).pop();
-          });
-          return SimpleDialog(
-            shape: CircleBorder(),
-            contentPadding: EdgeInsets.all(min(
-                    MediaQuery.of(context).size.width,
-                    MediaQuery.of(context).size.height) /
-                11),
-            children: [
-              Center(
-                child: Text(
-                  getEmoji(letter, languageProvider.language),
-                  style: TextStyle(
-                      fontSize: min(MediaQuery.of(context).size.width,
-                              MediaQuery.of(context).size.height) /
-                          2),
-                ),
-              ),
-            ],
-          );
-        }).then((value) {
-      if (timer.isActive) {
-        timer.cancel();
-      }
+      context: context,
+      builder: (BuildContext builderContext) {
+        _startTimer(builderContext);
+        return _buildDialog(context, letter, languageProvider);
+      },
+    ).then((value) {
+      _cancelTimer();
     });
+  }
+
+  static Timer? _timer;
+
+  static void _startTimer(BuildContext context) {
+    _timer = Timer(Duration(seconds: 3), () {
+      Navigator.of(context).pop();
+    });
+  }
+
+  static void _cancelTimer() {
+    if (_timer?.isActive ?? false) {
+      _timer?.cancel();
+    }
+  }
+
+  static SimpleDialog _buildDialog(BuildContext context, String letter, LanguageProvider languageProvider) {
+    return SimpleDialog(
+      shape: CircleBorder(),
+      contentPadding: EdgeInsets.all(min(
+              MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height) /
+          11),
+      children: [
+        Center(
+          child: Text(
+            getEmoji(letter, languageProvider.language),
+            style: TextStyle(
+                fontSize: min(MediaQuery.of(context).size.width,
+                        MediaQuery.of(context).size.height) /
+                    2),
+          ),
+        ),
+      ],
+    );
   }
 
   static final Map<Language, Map<String, List<String>>> _emojiSets = {
