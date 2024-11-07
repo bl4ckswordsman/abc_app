@@ -71,14 +71,30 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
 
   OutlinedBorder Function() _currentShape = circle;
 
-  void _onButtonPressed() async {
+  void handleButtonPress() async {
+    _changeButtonColor();
+    _playConfetti();
+    await _playRandomSound();
+    _changeButtonShape();
+  }
+
+  void _changeButtonColor() {
     Color randomColor =
         Colors.primaries[Random().nextInt(Colors.primaries.length)];
-    context.playConfetti();
     setState(() {
       _buttonColor = randomColor;
     });
+  }
+
+  void _playConfetti() {
+    context.playConfetti();
+  }
+
+  Future<void> _playRandomSound() async {
     await audioManager.playRandom();
+  }
+
+  void _changeButtonShape() {
     setState(() {
       _currentShape = shapes[Random().nextInt(shapes.length)];
     });
@@ -91,8 +107,12 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
     double buttonSize = screenSize * 0.7;
     double textSize = buttonSize * 0.6;
 
+    return buildButton(buttonSize, textSize);
+  }
+
+  Widget buildButton(double buttonSize, double textSize) {
     return ElevatedButton(
-      onPressed: _onButtonPressed,
+      onPressed: handleButtonPress,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: _buttonColor,
