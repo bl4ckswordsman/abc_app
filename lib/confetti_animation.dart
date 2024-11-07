@@ -9,10 +9,10 @@ class ConfettiAnimation extends StatefulWidget {
   ConfettiAnimation({required this.child, this.alignment = Alignment.center});
 
   @override
-  _ConfettiAnimationState createState() => _ConfettiAnimationState();
+  ConfettiAnimationState createState() => ConfettiAnimationState();
 }
 
-class _ConfettiAnimationState extends State<ConfettiAnimation> {
+class ConfettiAnimationState extends State<ConfettiAnimation> {
   late ConfettiController _confettiController;
 
   @override
@@ -70,6 +70,6 @@ class _ConfettiAnimationState extends State<ConfettiAnimation> {
 
 extension ConfettiAnimationExtension on BuildContext {
   void playConfetti() {
-    findAncestorStateOfType<_ConfettiAnimationState>()?.playConfetti();
+    findAncestorStateOfType<ConfettiAnimationState>()?.playConfetti();
   }
 }
