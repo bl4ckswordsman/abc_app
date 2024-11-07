@@ -1,27 +1,9 @@
 import 'package:abc_app/audio_manager.dart';
-import 'package:abc_app/emoji.dart';
 import 'package:abc_app/material3_shapes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:abc_app/confetti_animation.dart';
-
-enum AnimationType { confetti, fireworks }
-
-class AnimationController {
-  final AnimationType type;
-
-  AnimationController(this.type);
-
-  Widget getAnimation({required Widget child}) {
-    switch (type) {
-      case AnimationType.confetti:
-        return ConfettiAnimation(child: child);
-      case AnimationType.fireworks:
-        // return FireworksAnimation(child: child);
-        return Container(); // Placeholder for demonstration
-    }
-  }
-}
+import 'package:abc_app/letter_details_page.dart';
 
 List<OutlinedBorder Function()> shapes = [
   circle,
@@ -55,7 +37,7 @@ class _AlphabetButtonState extends State<AlphabetButton> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => _LetterDetailsPage(widget.letter),
+                builder: (context) => LetterDetailsPage(widget.letter), // Updated reference
               ),
             );
           },
@@ -88,29 +70,29 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
   final AudioManager audioManager = AudioManager();
 
   OutlinedBorder Function() _currentShape = circle;
+
+  void _onButtonPressed() async {
+    Color randomColor =
+        Colors.primaries[Random().nextInt(Colors.primaries.length)];
+    context.playConfetti();
+    setState(() {
+      _buttonColor = randomColor;
+    });
+    await audioManager.playRandom();
+    setState(() {
+      _currentShape = shapes[Random().nextInt(shapes.length)];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Get the size of the current screen
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    double screenSize = min(mediaQuery.size.width, mediaQuery.size.height); // Use the smaller dimension
-
-    double buttonSize = screenSize * 0.7; // Ensure button is a square
+    double screenSize = min(mediaQuery.size.width, mediaQuery.size.height);
+    double buttonSize = screenSize * 0.7;
     double textSize = buttonSize * 0.6;
+
     return ElevatedButton(
-      onPressed: () async {
-        // Change button color to random color on press
-        Color randomColor =
-            Colors.primaries[Random().nextInt(Colors.primaries.length)];
-        // Play the confetti animation
-        context.playConfetti();
-        setState(() {
-          _buttonColor = randomColor;
-        });
-        await audioManager.playRandom();
-        setState(() {
-          _currentShape = shapes[Random().nextInt(shapes.length)];
-        });
-      },
+      onPressed: _onButtonPressed,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: _buttonColor,
@@ -120,44 +102,6 @@ class _LargeLetterButtonState extends State<LargeLetterButton> {
       ),
       child: Text(widget.letter,
           textAlign: TextAlign.center, style: TextStyle(fontSize: textSize)),
-    );
-  }
-}
-
-class _LetterDetailsPage extends StatefulWidget {
-  final String letter;
-
-  _LetterDetailsPage(this.letter);
-
-  @override
-  State<_LetterDetailsPage> createState() => _LetterDetailsPageState();
-}
-
-class _LetterDetailsPageState extends State<_LetterDetailsPage> {
-  final AnimationController animationController =
-      AnimationController(AnimationType.confetti);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.letter),
-        actions: [
-          IconButton(
-            iconSize: 40.0,
-            icon: const Icon(Icons.emoji_emotions),
-            color: Colors.red,
-            onPressed: () {
-              Emoji.emojiDialog(context, widget.letter);
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: animationController.getAnimation(
-          child: LargeLetterButton(letter: widget.letter),
-        ),
-      ),
     );
   }
 }
