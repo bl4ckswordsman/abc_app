@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:abc_app/emoji.dart';
-import 'package:abc_app/animation_controller.dart';
+import 'package:abc_app/animation_controller.dart' as custom_animation;
 
 class _LetterDetailsPage extends StatefulWidget {
   final String letter;
@@ -12,8 +12,8 @@ class _LetterDetailsPage extends StatefulWidget {
 }
 
 class _LetterDetailsPageState extends State<_LetterDetailsPage> {
-  final AnimationController animationController =
-      AnimationController(AnimationType.confetti);
+  final custom_animation.AnimationController animationController =
+      custom_animation.AnimationController(custom_animation.AnimationType.confetti);
 
   @override
   Widget build(BuildContext context) {
