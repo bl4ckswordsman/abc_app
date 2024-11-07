@@ -7,7 +7,6 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-// import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:math' as math;
 import 'update_service.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +26,6 @@ class ChromeWebView {
         ),
       );
     } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
       debugPrint(e.toString());
     }
   }
@@ -44,7 +42,6 @@ class SettingsPageState extends State<SettingsPage> {
       'https://api.github.com/repos/bl4ckswordsman/abc_app/';
   static const String uri = '${repoUri}releases/latest';
 
-  // Get the current theme mode
   AdaptiveThemeMode getThemeMode() {
     return AdaptiveTheme.of(context).mode;
   }
@@ -76,92 +73,82 @@ class SettingsPageState extends State<SettingsPage> {
     return false;
   }
 
-/// Show a dialog with the latest release information and an update button if an update is available
-void showAndroidUpdates() async {
-  // Get language provider instance
-  final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-  
-  // Get the latest release information from GitHub
-  final latestRelease = await getLatestReleaseInfo();
-  
-  // Get the current app version
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String currentVersion = packageInfo.version;
-  
-  // Check if the latest release is newer than the current version
-  final latestVersion = latestRelease['tag_name'];
-  final latestVersionNum = latestVersion.substring(1);
-  final currentVersionNum = currentVersion;
-  final isUpdateAvailable = isVersionGreater(currentVersionNum, latestVersionNum);
+  void showAndroidUpdates() async {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final latestRelease = await getLatestReleaseInfo();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentVersion = packageInfo.version;
+    final latestVersion = latestRelease['tag_name'];
+    final latestVersionNum = latestVersion.substring(1);
+    final currentVersionNum = currentVersion;
+    final isUpdateAvailable = isVersionGreater(currentVersionNum, latestVersionNum);
 
-  // Show a dialog with the latest release information and an update button if an update is available
-  // ignore: use_build_context_synchronously
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: isUpdateAvailable
-            ? Row(
-                children: [
-                  Icon(Icons.new_releases_outlined),
-                  SizedBox(width: 8.0),
-                  Text(languageProvider.translate('newUpdateAvailable'))
-                ],
-              )
-            : Text(languageProvider.translate('latestRelease')),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${languageProvider.translate('currentVersion')}: $currentVersion',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                '${languageProvider.translate('latestVersion')}: $latestVersion',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text.rich(
-                TextSpan(
-                  children: latestRelease['body']
-                      .split('\n')
-                      .map<InlineSpan>((line) {
-                    if (line.startsWith('##')) {
-                      return TextSpan(
-                        text: line.substring(2) + '\n', // Remove '##'
-                        style: TextStyle(fontSize: 16), // Apply larger font size
-                      );
-                    } else {
-                      return TextSpan(text: line + '\n');
-                    }
-                  }).toList(),
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: isUpdateAvailable
+              ? Row(
+                  children: [
+                    Icon(Icons.new_releases_outlined),
+                    SizedBox(width: 8.0),
+                    Text(languageProvider.translate('newUpdateAvailable'))
+                  ],
+                )
+              : Text(languageProvider.translate('latestRelease')),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${languageProvider.translate('currentVersion')}: $currentVersion',
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
-            ],
+                Text(
+                  '${languageProvider.translate('latestVersion')}: $latestVersion',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text.rich(
+                  TextSpan(
+                    children: latestRelease['body']
+                        .split('\n')
+                        .map<InlineSpan>((line) {
+                      if (line.startsWith('##')) {
+                        return TextSpan(
+                          text: line.substring(2) + '\n',
+                          style: TextStyle(fontSize: 16),
+                        );
+                      } else {
+                        return TextSpan(text: line + '\n');
+                      }
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          if (isUpdateAvailable)
+          actions: [
+            if (isUpdateAvailable)
+              TextButton(
+                child: Text(languageProvider.translate('update')),
+                onPressed: () async {
+                  final apkLink = latestRelease['assets'][0]['browser_download_url'];
+                  await UpdateService().downloadAndInstallApk(apkLink);
+                  Navigator.of(context).pop();
+                },
+              ),
             TextButton(
-              child: Text(languageProvider.translate('update')),
-              onPressed: () async {
-                final apkLink = latestRelease['assets'][0]['browser_download_url'];
-                await UpdateService().downloadAndInstallApk(apkLink);
+              child: Text(languageProvider.translate('close')),
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-          TextButton(
-            child: Text(languageProvider.translate('close')),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          ],
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -174,118 +161,134 @@ void showAndroidUpdates() async {
   }
 
   @override
-Widget build(BuildContext context) {
-  final languageProvider = Provider.of<LanguageProvider>(context);
-  
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(languageProvider.translate('settings')),
-    ),
-    body: ListView(
-      children: [
-        SwitchListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            child: Text(
-              languageProvider.translate('darkTheme'),
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          value: getThemeMode() == AdaptiveThemeMode.dark,
-          onChanged: (value) {
-            setState(() {
-              AdaptiveTheme.of(context).setThemeMode(
-                  value ? AdaptiveThemeMode.dark : AdaptiveThemeMode.light);
-            });
-          },
+  Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(languageProvider.translate('settings')),
+      ),
+      body: ListView(
+        children: [
+          buildThemeSwitchTile(languageProvider),
+          buildBuildInfoTile(),
+          buildCheckUpdatesTile(),
+          buildLanguageTile(languageProvider),
+        ],
+      ),
+    );
+  }
+
+  SwitchListTile buildThemeSwitchTile(LanguageProvider languageProvider) {
+    return SwitchListTile(
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        child: Text(
+          languageProvider.translate('darkTheme'),
+          style: TextStyle(fontSize: 20),
         ),
-        ListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            child: Text(
-              languageProvider.translate('buildInfo'),
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          onTap: () {
-            showReleaseInfo();
-          },
+      ),
+      value: getThemeMode() == AdaptiveThemeMode.dark,
+      onChanged: (value) {
+        setState(() {
+          AdaptiveTheme.of(context).setThemeMode(
+              value ? AdaptiveThemeMode.dark : AdaptiveThemeMode.light);
+        });
+      },
+    );
+  }
+
+  ListTile buildBuildInfoTile() {
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        child: Text(
+          'Build Info',
+          style: TextStyle(fontSize: 20),
         ),
-        !kIsWeb
-            ? Platform.isAndroid
-                ? ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 18.0),
-                      child: Text(
-                        languageProvider.translate('checkUpdates'),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    onTap: () {
-                      showAndroidUpdates();
-                    },
-                  )
-                : ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 18.0),
-                      child: Text(
-                        languageProvider.translate('checkUpdates'),
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
-                      ),
-                    ),
-                  )
+      ),
+      onTap: () {
+        showReleaseInfo();
+      },
+    );
+  }
+
+  ListTile buildCheckUpdatesTile() {
+    return !kIsWeb
+        ? Platform.isAndroid
+            ? ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 18.0),
+                  child: Text(
+                    'Check for Updates',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                onTap: () {
+                  showAndroidUpdates();
+                },
+              )
             : ListTile(
                 title: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: Text(
-                    languageProvider.translate('checkUpdates'),
+                    'Check for Updates',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 ),
+              )
+        : ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              child: Text(
+                'Check for Updates',
+                style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
-        ListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            child: Text(
-              languageProvider.translate('language'),
-              style: TextStyle(fontSize: 20),
             ),
-          ),
-          trailing: SizedBox(
-            width: 120,
-            child: LanguageDropdown(),
-          ),
+          );
+  }
+
+  ListTile buildLanguageTile(LanguageProvider languageProvider) {
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        child: Text(
+          languageProvider.translate('language'),
+          style: TextStyle(fontSize: 20),
         ),
-      ],
-    ),
-  );
-}
+      ),
+      trailing: SizedBox(
+        width: 120,
+        child: LanguageDropdown(),
+      ),
+    );
+  }
 
-void showReleaseInfo() async {
-  final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String currentVersion = packageInfo.version;
-  final latestRelease = await getLatestReleaseInfo();
-  String latestVersion = latestRelease['tag_name'];
+  void showReleaseInfo() async {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentVersion = packageInfo.version;
+    final latestRelease = await getLatestReleaseInfo();
+    String latestVersion = latestRelease['tag_name'];
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(languageProvider.translate('buildInfo')),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${languageProvider.translate('currentVersion')}: v$currentVersion'),
-            Text('${languageProvider.translate('latestVersion')}: $latestVersion'),
-            SizedBox(height: 16),
-            TextButton.icon(
-              onPressed: () {
-                ChromeWebView()._launchURL(repoLink, context);
-              },
-              icon: Icon(EvaIcons.github),
-              label: Text(languageProvider.translate('githubRepo')),
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(languageProvider.translate('buildInfo')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('${languageProvider.translate('currentVersion')}: v$currentVersion'),
+              Text('${languageProvider.translate('latestVersion')}: $latestVersion'),
+              SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: () {
+                  ChromeWebView()._launchURL(repoLink, context);
+                },
+                icon: Icon(EvaIcons.github),
+                label: Text(languageProvider.translate('githubRepo')),
               ),
             ],
           ),
@@ -301,11 +304,11 @@ class LanguageDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120, // Add a fixed width
+      width: 120,
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {
           return DropdownButton<Language>(
-            isExpanded: true, // Make the dropdown expand to fill the SizedBox
+            isExpanded: true,
             value: languageProvider.language,
             onChanged: (Language? newValue) {
               if (newValue != null) {
