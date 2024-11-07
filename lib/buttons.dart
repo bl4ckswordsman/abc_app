@@ -1,10 +1,8 @@
 import 'package:abc_app/audio_manager.dart';
-import 'package:abc_app/emoji.dart';
 import 'package:abc_app/material3_shapes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:abc_app/confetti_animation.dart';
-import 'package:abc_app/animation_controller.dart';
 import 'package:abc_app/letter_details_page.dart';
 
 List<OutlinedBorder Function()> shapes = [
