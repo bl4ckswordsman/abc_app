@@ -1,17 +1,18 @@
+import 'package:abc_app/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:abc_app/emoji.dart';
 import 'package:abc_app/animation_controller.dart' as custom_animation;
 
-class _LetterDetailsPage extends StatefulWidget {
+class LetterDetailsPage extends StatefulWidget { // Removed underscore
   final String letter;
 
-  _LetterDetailsPage(this.letter);
+  LetterDetailsPage(this.letter); // Removed underscore
 
   @override
-  State<_LetterDetailsPage> createState() => _LetterDetailsPageState();
+  State<LetterDetailsPage> createState() => _LetterDetailsPageState(); // Removed underscore
 }
 
-class _LetterDetailsPageState extends State<_LetterDetailsPage> {
+class _LetterDetailsPageState extends State<LetterDetailsPage> { // Removed underscore
   final custom_animation.AnimationController animationController =
       custom_animation.AnimationController(custom_animation.AnimationType.confetti);
 

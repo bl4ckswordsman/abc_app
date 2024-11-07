@@ -39,7 +39,7 @@ class _AlphabetButtonState extends State<AlphabetButton> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => _LetterDetailsPage(widget.letter),
+                builder: (context) => LetterDetailsPage(widget.letter), // Updated reference
               ),
             );
           },
