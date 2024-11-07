@@ -171,8 +171,8 @@ class SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: [
           buildThemeSwitchTile(languageProvider),
-          buildBuildInfoTile(),
-          buildCheckUpdatesTile(),
+          buildBuildInfoTile(languageProvider),
+          buildCheckUpdatesTile(languageProvider),
           buildLanguageTile(languageProvider),
         ],
       ),
@@ -198,12 +198,12 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile buildBuildInfoTile() {
+  ListTile buildBuildInfoTile(LanguageProvider languageProvider) {
     return ListTile(
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18.0),
         child: Text(
-          'Build Info',
+          languageProvider.translate('buildInfo'),
           style: TextStyle(fontSize: 20),
         ),
       ),
@@ -213,14 +213,14 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile buildCheckUpdatesTile() {
+  ListTile buildCheckUpdatesTile(LanguageProvider languageProvider) {
     return !kIsWeb
         ? Platform.isAndroid
             ? ListTile(
                 title: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: Text(
-                    'Check for Updates',
+                    languageProvider.translate('checkUpdates'),
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
@@ -232,7 +232,7 @@ class SettingsPageState extends State<SettingsPage> {
                 title: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: Text(
-                    'Check for Updates',
+                    languageProvider.translate('checkForUpdates'),
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 ),
@@ -241,7 +241,7 @@ class SettingsPageState extends State<SettingsPage> {
             title: Padding(
               padding: const EdgeInsets.symmetric(vertical: 18.0),
               child: Text(
-                'Check for Updates',
+                languageProvider.translate('checkForUpdates'),
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
             ),
