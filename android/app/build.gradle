@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '2.1.0'
 }
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -23,7 +24,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new FileNotFoundException("Flutter SDK not found.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
