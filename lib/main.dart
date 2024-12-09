@@ -57,9 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<PopupMenuItem> get menuItems => [
         PopupMenuItem(
-          child: IconButton(
-            icon: const Icon(Icons.brightness_4),
-            onPressed: () {
+          child: ListTile(
+            leading: const Icon(Icons.brightness_4),
+            title: Text('Switch theme'),
+            onTap: () {
               if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
                 AdaptiveTheme.of(context).setLight();
               } else {
@@ -69,9 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         PopupMenuItem(
-          child: IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
+          child: ListTile(
+            leading: const Icon(Icons.settings),
+            title: Text('Settings'),
+            onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/settings');
             },
