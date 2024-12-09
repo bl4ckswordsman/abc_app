@@ -1,39 +1,16 @@
-buildscript {
-    ext.kotlin_version = '1.7.10'
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+repositories {
+    google()
+    mavenCentral()
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).tap {
-            configureEach {
-                options.compilerArgs << "-Xlint:deprecation"
-            }
-        }
-    }
-}
-
-rootProject.buildDir = '../build'
-
+rootProject.layout.buildDirectory = file('../build')
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.layout.buildDirectory = file("${rootProject.layout.buildDirectory.asFile.get()}/${project.name}")
 }
-
 subprojects {
     project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete layout.buildDirectory
 }
