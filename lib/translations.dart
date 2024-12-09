@@ -15,7 +15,6 @@ class Translations {
       'newUpdateAvailable': 'New Update Available',
       'latestRelease': 'Latest Release',
       'githubRepo': 'GitHub repo',
-      'switchTheme': 'Switch theme', // Pf7e1
     },
     'sv': {
       'settings': 'Inställningar',
@@ -30,7 +29,6 @@ class Translations {
       'newUpdateAvailable': 'Ny uppdatering tillgänglig',
       'latestRelease': 'Senaste versionen',
       'githubRepo': 'GitHub-repo',
-      'switchTheme': 'Byt tema', // Pf7e1
     },
   };
 
