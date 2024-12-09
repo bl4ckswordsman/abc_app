@@ -30,7 +30,14 @@ class ColorPickerButton extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Reset to default'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.refresh),
+                  SizedBox(width: 8),
+                  Text('Reset to default'),
+                ],
+              ),
               onPressed: () {
                 onColorSelected(Colors.blue); // Reset color
                 Navigator.of(context).pop(); // Close the popup
