@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:abc_app/confetti_animation.dart';
 import 'package:abc_app/letter_details_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:abc_app/main.dart';
 
 List<OutlinedBorder Function()> shapes = [
   circle,
@@ -29,21 +30,6 @@ class AlphabetButton extends StatefulWidget {
 }
 
 class _AlphabetButtonState extends State<AlphabetButton> {
-  Color _buttonColor = Colors.blue;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadButtonColor();
-  }
-
-  Future<void> _loadButtonColor() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _buttonColor = Color(prefs.getInt('buttonColor') ?? Colors.blue.value);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -53,13 +39,14 @@ class _AlphabetButtonState extends State<AlphabetButton> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LetterDetailsPage(widget.letter), // Updated reference
+                builder: (context) =>
+                    LetterDetailsPage(widget.letter), // Updated reference
               ),
             );
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
-            backgroundColor: _buttonColor,
+            backgroundColor: Provider.of<ColorProvider>(context).buttonColor,
             minimumSize: const Size(120, 120),
             shape: CircleBorder(),
           ),
