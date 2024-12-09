@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:provider/provider.dart';
+import 'package:abc_app/language_provider.dart';
 import 'glowing_gradient_border.dart';
 
 class ColorPickerButton extends StatelessWidget {
@@ -17,7 +19,8 @@ class ColorPickerButton extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Pick a color'),
+          title: Text(Provider.of<LanguageProvider>(context, listen: false)
+              .translate('pickColor')),
           content: SingleChildScrollView(
             child: BlockPicker(
               pickerColor: initialColor,
@@ -30,12 +33,13 @@ class ColorPickerButton extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.refresh),
-                  SizedBox(width: 8),
-                  Text('Reset to default'),
+                  const Icon(Icons.refresh),
+                  const SizedBox(width: 8),
+                  Text(Provider.of<LanguageProvider>(context, listen: false)
+                      .translate('resetToDefault')),
                 ],
               ),
               onPressed: () {

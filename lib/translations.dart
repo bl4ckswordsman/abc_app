@@ -3,6 +3,8 @@ import 'package:abc_app/language_provider.dart';
 class Translations {
   static final Map<String, Map<String, String>> _translations = {
     'en': {
+      'pickColor': 'Pick a color',
+      'resetToDefault': 'Reset to default',
       'settings': 'Settings',
       'darkTheme': 'Dark Theme',
       'buildInfo': 'Build info',
@@ -17,6 +19,8 @@ class Translations {
       'githubRepo': 'GitHub repo',
     },
     'sv': {
+      'pickColor': 'Välj en färg',
+      'resetToDefault': 'Återställ till standard',
       'settings': 'Inställningar',
       'darkTheme': 'Mörkt tema',
       'buildInfo': 'Bygginfo',
