@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10.0),
             child: PopupMenuButton<String>(
               iconSize: 30.0,
               icon: const Icon(Icons.more_vert),
