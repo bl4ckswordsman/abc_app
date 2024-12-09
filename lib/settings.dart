@@ -12,6 +12,40 @@ import 'update_service.dart';
 import 'package:provider/provider.dart';
 import 'package:abc_app/language_provider.dart';
 
+List<PopupMenuEntry<String>> buildMenuItems(BuildContext context) {
+  final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+  return [
+    PopupMenuItem(
+      value: 'theme',
+      child: ListTile(
+        leading: const Icon(Icons.brightness_4),
+        title: Text(languageProvider.translate('darkTheme')),
+      ),
+    ),
+    PopupMenuItem(
+      value: 'settings',
+      child: ListTile(
+        leading: const Icon(Icons.settings),
+        title: Text(languageProvider.translate('settings')),
+      ),
+    ),
+  ];
+}
+
+void handleMenuSelection(String value, BuildContext context) {
+  switch (value) {
+    case 'theme':
+      if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
+        AdaptiveTheme.of(context).setLight();
+      } else {
+        AdaptiveTheme.of(context).setDark();
+      }
+      break;
+    case 'settings':
+      Navigator.pushNamed(context, '/settings');
+      break;
+  }
+}
 class ChromeWebView {
   void _launchURL(String urlString, BuildContext context) async {
     try {
@@ -163,7 +197,7 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(languageProvider.translate('settings')),
