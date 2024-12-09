@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:abc_app/language_provider.dart';
 import 'settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'color_picker_button.dart';
 
 void main() {
   runApp(const ABCapp());
@@ -55,6 +57,26 @@ class _MyHomePageState extends State<MyHomePage> {
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
     ..addAll(['Å', 'Ä', 'Ö']);
 
+  Color _buttonColor = Colors.blue;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadButtonColor();
+  }
+
+  Future<void> _loadButtonColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _buttonColor = Color(prefs.getInt('buttonColor') ?? Colors.blue.value);
+    });
+  }
+
+  Future<void> _saveButtonColor(Color color) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('buttonColor', color.value);
+  }
+
   List<PopupMenuEntry<String>> _buildMenuItems(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return [
@@ -102,6 +124,15 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 100,
         title: const Text('ABC app'),
         actions: [
+          ColorPickerButton(
+            initialColor: _buttonColor,
+            onColorSelected: (color) {
+              setState(() {
+                _buttonColor = color;
+              });
+              _saveButtonColor(color);
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: PopupMenuButton<String>(
