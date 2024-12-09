@@ -55,29 +55,40 @@ class _MyHomePageState extends State<MyHomePage> {
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index))
     ..addAll(['Å', 'Ä', 'Ö']);
 
-  List<PopupMenuItem> get menuItems => [
-        PopupMenuItem(
-          child: IconButton(
-            icon: const Icon(Icons.brightness_4),
-            onPressed: () {
-              if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
-                AdaptiveTheme.of(context).setLight();
-              } else {
-                AdaptiveTheme.of(context).setDark();
-              }
-            },
-          ),
+  List<PopupMenuEntry<String>> _buildMenuItems(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    return [
+      PopupMenuItem(
+        value: 'theme',
+        child: ListTile(
+          leading: const Icon(Icons.brightness_4),
+          title: Text(languageProvider.translate('darkTheme')),
         ),
-        PopupMenuItem(
-          child: IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
+      ),
+      PopupMenuItem(
+        value: 'settings',
+        child: ListTile(
+          leading: const Icon(Icons.settings),
+          title: Text(languageProvider.translate('settings')),
         ),
-      ];
+      ),
+    ];
+  }
+
+  void _handleMenuSelection(String value, BuildContext context) {
+    switch (value) {
+      case 'theme':
+        if (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark) {
+          AdaptiveTheme.of(context).setLight();
+        } else {
+          AdaptiveTheme.of(context).setDark();
+        }
+        break;
+      case 'settings':
+        Navigator.pushNamed(context, '/settings');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +104,11 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: PopupMenuButton(
+            child: PopupMenuButton<String>(
               iconSize: 30.0,
               icon: const Icon(Icons.more_vert),
-              itemBuilder: (context) {
-                return menuItems;
-              },
+              itemBuilder: buildMenuItems,
+              onSelected: (value) => handleMenuSelection(value, context),
             ),
           ),
         ],
