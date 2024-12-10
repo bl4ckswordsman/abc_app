@@ -254,7 +254,7 @@ class SettingsPageState extends State<SettingsPage> {
                 title: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: Text(
-                    languageProvider.translate('checkUpdates'),
+                    languageProvider.translate('checkForUpdates'),
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
