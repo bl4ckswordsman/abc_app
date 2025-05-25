@@ -168,10 +168,11 @@ class SettingsPageState extends State<SettingsPage> {
               TextButton(
                 child: Text(languageProvider.translate('update')),
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   final apkLink = latestRelease['assets'][0]['browser_download_url'];
                   await UpdateService().downloadAndInstallApk(apkLink);
                   if (!mounted) return;
-                  Navigator.of(context).pop();
+                  navigator.pop();
                 },
               ),
             TextButton(
