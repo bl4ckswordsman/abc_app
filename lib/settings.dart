@@ -117,6 +117,7 @@ class SettingsPageState extends State<SettingsPage> {
     final currentVersionNum = currentVersion;
     final isUpdateAvailable = isVersionGreater(currentVersionNum, latestVersionNum);
 
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) {
@@ -167,14 +168,17 @@ class SettingsPageState extends State<SettingsPage> {
               TextButton(
                 child: Text(languageProvider.translate('update')),
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   final apkLink = latestRelease['assets'][0]['browser_download_url'];
                   await UpdateService().downloadAndInstallApk(apkLink);
-                  Navigator.of(context).pop();
+                  if (!mounted) return;
+                  navigator.pop();
                 },
               ),
             TextButton(
               child: Text(languageProvider.translate('close')),
               onPressed: () {
+                if (!mounted) return;
                 Navigator.of(context).pop();
               },
             ),
@@ -305,6 +309,7 @@ class SettingsPageState extends State<SettingsPage> {
     final latestRelease = await getLatestReleaseInfo();
     String latestVersion = latestRelease['tag_name'];
 
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) {
