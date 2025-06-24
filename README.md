@@ -16,6 +16,8 @@ For the web build of this app hosted in Github Pages, click
 
 You can download the latest Android APKs from the
  [Releases](https://github.com/bl4ckswordsman/abc_app/releases) page.
+ > [!NOTE]
+ > APKs builds are automated with GitHub Actions and scanned by VirusTotal.
 
 ## Resources
 
