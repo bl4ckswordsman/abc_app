@@ -1,8 +1,10 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/adb864e3af8543b2b5fdee7a371eccd5)](https://app.codacy.com/gh/bl4ckswordsman/abc_app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/bl4ckswordsman/abc_app)](https://github.com/bl4ckswordsman/abc_app/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/bl4ckswordsman/abc_app/total.svg)](https://github.com/bl4ckswordsman/abc_app/releases)
+
 
 <!-- Started counting 2025-07-28 -->
-[![Hits](https://hits.sh/github.com/bl4ckswordsman/abc_qpp.svg)](https://hits.sh/github.com/bl4ckswordsman/abc_app/)
+[![Hits](https://hits.sh/github.com/bl4ckswordsman/abc_app.svg)](https://hits.sh/github.com/bl4ckswordsman/abc_app/)
 
 <!--
 [![Visits Badge](https://badges.pufler.dev/visits/bl4ckswordsman/abc_app)](https://github.com/bl4ckswordsman)
