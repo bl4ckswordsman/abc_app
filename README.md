@@ -22,6 +22,14 @@ For the web build of this app hosted in Github Pages, click
 
 ## Download
 
+### Install via Obtainium
+
+<a href="http://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/bl4ckswordsman/abc_app/releases">
+  <img src=".github/assets/badge_obtainium.png" alt="Get it on Obtainium" height="100" />
+</a>
+
+### GitHub Release
+
 You can download the latest Android APKs from the
  [Releases](https://github.com/bl4ckswordsman/abc_app/releases) page.
  > [!NOTE]
