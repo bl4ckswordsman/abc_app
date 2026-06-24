@@ -5,14 +5,25 @@
 
 version: 2
 updates:
-  - package-ecosystem: "pub" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "pub"
+    directory: "/"
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
+    # Group all pub updates into one PR
+    groups:
+      pub-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
+    # Group all github-actions updates into one PR
+    groups:
+      actions-dependencies:
+        patterns:
+          - "*"
+
