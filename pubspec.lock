@@ -45,10 +45,10 @@ packages:
     dependency: "direct main"
     description:
       name: audioplayers
-      sha256: ab3868065119285370fcd41399c7541fb32239dd90f65be1338d284a80487668
+      sha256: "2ba4bb2944baacbdd5372ff8254a8e7feb8c10d7739545e392f5605a8f618745"
       url: "https://pub.dev"
     source: hosted
-    version: "6.8.0"
+    version: "6.8.1"
   audioplayers_android:
     dependency: transitive
     description:
@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: audioplayers_windows
-      sha256: d0690f33b1443ee89632126861a997db33dc90f3af54aef305dfb977bc580f2c
+      sha256: a70ae82bba2dfcb6eb03dd4815d737a2d46d33ea5a96a03f535cfcaac490e413
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.4.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -604,10 +604,10 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "4bf625947f6c7713ee242296a682e23e44823c09cf9d79e4f1238923c92db852"
+      sha256: f5c435dc0e0d461e5b32471a870f769b6a1cc46930637efe24fbc535314e78ad
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.0"
+    version: "10.2.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
